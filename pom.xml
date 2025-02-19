@@ -8,10 +8,10 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>br.com</groupId>
-	<artifactId>directpurchase</artifactId>
+	<artifactId>directpurchaseapi</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>directpurchase</name>
-	<description>directpurchase</description>
+	<name>direct-purchase-api</name>
+	<description>direct-purchase-api</description>
 	<url />
 	<licenses>
 		<license />
