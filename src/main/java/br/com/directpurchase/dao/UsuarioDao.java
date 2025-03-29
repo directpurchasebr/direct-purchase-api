@@ -3,7 +3,7 @@ package br.com.directpurchase.dao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import br.com.directpurchase.dto.UsuarioDto;
+import br.com.directpurchase.auth.dto.UsuarioDto;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.Query;

@@ -8,23 +8,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.directpurchase.auth.request.UsuarioRequest;
+import br.com.directpurchase.auth.service.UsuarioService;
 import br.com.directpurchase.exception.APIException;
-import br.com.directpurchase.request.UsuarioRequest;
-import br.com.directpurchase.response.Status;
-import br.com.directpurchase.service.UsuarioService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Api(tags = { "cadastro" })
 @RestController
 public class CadastroController {
 
 	@Autowired
 	private UsuarioService usuarioService;
 
-	@ApiOperation(value = "Cadastra/Altera usuario", response = Status.class)
 	@PostMapping(path = "/usuario/salvar", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> salvar(@RequestBody UsuarioRequest bean) throws APIException {
 		try {
@@ -35,4 +30,13 @@ public class CadastroController {
 		}
 	}
 	
+	@PostMapping(path = "/usuario/consultar", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Object> consultar(@RequestBody UsuarioRequest bean) throws APIException {
+		try {
+			return ResponseEntity.ok().body(usuarioService.salvarUsuario(bean));
+		} catch (Exception e) {
+			log.error("[{}] {}", e.getMessage(), e);
+			throw new APIException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+		}
+	}
 }
