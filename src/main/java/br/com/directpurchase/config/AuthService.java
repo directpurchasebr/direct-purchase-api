@@ -9,9 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Jwks;
 import io.jsonwebtoken.security.Keys;
-import io.jsonwebtoken.security.SecretJwk;
 
 @Service
 public class AuthService {

@@ -63,6 +63,8 @@ public class ProdutoController {
 	@GetMapping(path = "/produto/listar", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> listarProdutos() throws APIException {
 		try {
+			log.info("[] /produto/listar");
+			
 			return ResponseEntity.ok().body(produtoService.listarProdutos());
 		} catch (Exception e) {
 			log.error("[{}] {}", e.getMessage(), e);
