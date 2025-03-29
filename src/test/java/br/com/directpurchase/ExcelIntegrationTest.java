@@ -19,13 +19,13 @@ import br.com.directpurchase.dto.TemplateFour;
 import br.com.directpurchase.dto.TemplateOne;
 import br.com.directpurchase.dto.TemplateThree;
 import br.com.directpurchase.dto.TemplateTwo;
-import br.com.directpurchase.poi.ImportTamplateFour;
-import br.com.directpurchase.poi.ImportTamplateOne;
-import br.com.directpurchase.poi.ImportTamplateThree;
-import br.com.directpurchase.poi.ImportTamplateTwo;
-import br.com.directpurchase.poi.ImportaProdutosExcel;
-import br.com.directpurchase.poi.Template;
-import br.com.directpurchase.service.ExcelImportService;
+import br.com.directpurchase.excel.poi.ImportTamplateFour;
+import br.com.directpurchase.excel.poi.ImportTamplateOne;
+import br.com.directpurchase.excel.poi.ImportTamplateThree;
+import br.com.directpurchase.excel.poi.ImportTamplateTwo;
+import br.com.directpurchase.excel.poi.ImportaProdutosExcel;
+import br.com.directpurchase.excel.poi.Template;
+import br.com.directpurchase.excel.service.ExcelImportService;
 import br.com.directpurchase.util.ValidateTemplate;
 
 @SpringBootTest
@@ -56,7 +56,7 @@ public class ExcelIntegrationTest {
 
 	@Test
 	void executeTest() throws FileNotFoundException {
-		String filePath = "C:\\Users\\julio.carmo\\Downloads\\template_4.xls";
+		String filePath = "/home/julio/Dev/backup_files/template_4.xls";
 		File initialFile = new File(filePath);
 		InputStream targetStream = new FileInputStream(initialFile);
 		excelImportService.importaExcel(1, targetStream);
@@ -65,7 +65,7 @@ public class ExcelIntegrationTest {
 	@Deprecated
 	void oldExecuteTest() throws EncryptedDocumentException, IOException {
 
-		String filePath = "C:\\Users\\julio.carmo\\Downloads\\template_4.xls";
+		String filePath = "/home/julio/Dev/backup_files/template_4.xls";
 		File initialFile = new File(filePath);
 		InputStream targetStream = new FileInputStream(initialFile);
 

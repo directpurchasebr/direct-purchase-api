@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
-import br.com.directpurchase.poi.Template;
+import br.com.directpurchase.excel.poi.Template;
 
 @Component
 public class ValidateTemplate {

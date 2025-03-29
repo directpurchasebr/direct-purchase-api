@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import br.com.directpurchase.auth.request.UsuarioRequest;
 import br.com.directpurchase.entity.Comprador;
 import br.com.directpurchase.entity.Fornecedor;
 import br.com.directpurchase.entity.Perfil;
@@ -18,7 +19,6 @@ import br.com.directpurchase.repository.PerfilRepository;
 import br.com.directpurchase.repository.UsuarioRepository;
 import br.com.directpurchase.request.CompradorRequest;
 import br.com.directpurchase.request.FornecedorRequest;
-import br.com.directpurchase.request.UsuarioRequest;
 import br.com.directpurchase.util.PasswordUtil;
 
 @Component
@@ -59,12 +59,12 @@ public class UsuarioTransform {
 		Perfil perfil = getPerfil(bean.getPerfilId());
 		entity.setPerfil(perfil);
 
-		List<Fornecedor> fornecedores = bean.getFornecedores().stream().map(f -> findFornecedorById(f))
-				.collect(Collectors.toList());
+		List<Fornecedor> fornecedores = bean.getFornecedores() == null ? null
+				: bean.getFornecedores().stream().map(f -> findFornecedorById(f)).collect(Collectors.toList());
 		entity.setFornecedores(fornecedores);
 
-		List<Comprador> compradores = bean.getCompradores().stream().map(c -> findCompradorById(c))
-				.collect(Collectors.toList());
+		List<Comprador> compradores = bean.getCompradores() == null ? null
+				: bean.getCompradores().stream().map(c -> findCompradorById(c)).collect(Collectors.toList());
 		entity.setCompradores(compradores);
 
 		return entity;
@@ -88,6 +88,24 @@ public class UsuarioTransform {
 	private Comprador findCompradorById(CompradorRequest bean) {
 		Optional<Comprador> optional = compradorRepository.findById(bean.getCompradorId());
 		return optional.get();
+	}
+
+	public UsuarioRequest transform(Usuario entity) {
+
+//		private List<FornecedorRequest> fornecedores;
+//		private List<CompradorRequest> compradores;
+
+		return UsuarioRequest.builder()
+				.usuarioId(entity.getUsuarioId())
+				.nome(entity.getNome())
+				.email(entity.getEmail())
+				.login(entity.getLogin())
+				.senha(entity.getSenha())
+				.indEstoque(entity.getIndEstoque())
+				.dataNascimento(entity.getDataNascimento().toLocalDate())
+				.perfilId(entity.getPerfil().getPerfilId())
+				.build();
+
 	}
 
 }

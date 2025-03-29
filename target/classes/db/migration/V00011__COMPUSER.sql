@@ -1,0 +1,13 @@
+DO $$
+BEGIN
+	CREATE TABLE COMPRADOR_USUARIO (
+		USUARIO_ID NUMERIC(7) NOT NULL,
+		COMPRADOR_ID NUMERIC(7) NOT NULL
+	);
+	
+	EXCEPTION 
+		WHEN duplicate_table THEN NULL;
+	    WHEN duplicate_object THEN NULL;
+	    WHEN duplicate_column THEN NULL;
+END
+$$;

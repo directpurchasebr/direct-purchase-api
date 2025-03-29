@@ -1,0 +1,13 @@
+DO $$
+BEGIN
+	CREATE TABLE FORNECEDOR_USUARIO (
+		FORNECEDOR_ID NUMERIC(7) NOT NULL,
+		USUARIO_ID NUMERIC(7) NOT NULL
+	);
+
+	EXCEPTION 
+		WHEN duplicate_table THEN NULL;
+	    WHEN duplicate_object THEN NULL;
+	    WHEN duplicate_column THEN NULL;
+END
+$$;
