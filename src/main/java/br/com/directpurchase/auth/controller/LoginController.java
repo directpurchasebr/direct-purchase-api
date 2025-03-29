@@ -27,7 +27,7 @@ public class LoginController {
 		try {
 			log.info("[{}] /login", bean);
 			return ResponseEntity.ok().body(loginService.logar(bean.getUsuario(), bean.getSenha()));
-		
+
 		} catch (ValidationException e) {
 			return ResponseEntity.ok().body(e.getMessage());
 
@@ -35,6 +35,6 @@ public class LoginController {
 			log.error("[{}] {}", e.getMessage(), e);
 			throw new APIException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
-
 	}
+
 }

@@ -25,3 +25,7 @@ server:
 springdoc:
  api-docs:
   path: /api-docs
+---
+jwt:
+  secret: '@bfo::d:!(1:!lck?;>0eev75`k0pb`fu]3!8d6|(=8:`)[l;>lf^|/t{6gr/)j'
+  expiration: 86400000 # 1 dia
