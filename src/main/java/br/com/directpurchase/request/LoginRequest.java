@@ -1,4 +1,4 @@
-package br.com.directpurchase.auth.request;
+package br.com.directpurchase.request;
 
 import java.io.Serializable;
 

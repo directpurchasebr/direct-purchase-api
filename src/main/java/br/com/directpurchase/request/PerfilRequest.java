@@ -1,18 +1,20 @@
-package br.com.directpurchase.auth.response;
+package br.com.directpurchase.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
 @Builder
-public class LoginResponse {
+public class PerfilRequest {
 
-	private String token;
-//	private String token;
+	private Integer perfilId;
+	private String descricao;
 }

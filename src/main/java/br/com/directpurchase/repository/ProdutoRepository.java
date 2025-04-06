@@ -14,7 +14,7 @@ public interface ProdutoRepository extends CrudRepository<Produto, Integer> {
 	public List<Produto> buscaProdutoMain(@Param("codigo") String codigo,
 			@Param("fornecedorId") Integer fornecedorId);
 
-	@Query("select p from Produto p where p.descricao like '%:descricao%' ")
+	@Query("select p from Produto p where p.descricao like %:descricao% ")
 	public List<Produto> buscaPorDescricao(@Param("descricao") String descricao);
 
 	@Query("select p from Produto p where p.fornecedor.fornecedorId = :fornecedorId ")

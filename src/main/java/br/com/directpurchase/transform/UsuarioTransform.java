@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import br.com.directpurchase.auth.request.UsuarioRequest;
 import br.com.directpurchase.entity.Comprador;
 import br.com.directpurchase.entity.Fornecedor;
 import br.com.directpurchase.entity.Perfil;
@@ -19,6 +18,8 @@ import br.com.directpurchase.repository.PerfilRepository;
 import br.com.directpurchase.repository.UsuarioRepository;
 import br.com.directpurchase.request.CompradorRequest;
 import br.com.directpurchase.request.FornecedorRequest;
+import br.com.directpurchase.request.PerfilRequest;
+import br.com.directpurchase.request.UsuarioRequest;
 import br.com.directpurchase.util.PasswordUtil;
 
 @Component
@@ -35,6 +36,20 @@ public class UsuarioTransform {
 
 	@Autowired
 	private CompradorRepository compradorRepository;
+
+	public UsuarioRequest transform(Usuario entity) {
+
+//		private List<FornecedorRequest> fornecedores;
+//		private List<CompradorRequest> compradores;
+
+		PerfilRequest perfil = PerfilRequest.builder().perfilId(entity.getPerfil().getPerfilId())
+				.descricao(entity.getPerfil().getDescricao()).build();
+
+		return UsuarioRequest.builder().usuarioId(entity.getUsuarioId()).nome(entity.getNome()).email(entity.getEmail())
+				.login(entity.getLogin()).senha(entity.getSenha()).indEstoque(entity.getIndEstoque())
+				.dataNascimento(entity.getDataNascimento().toLocalDate()).perfil(perfil).build();
+
+	}
 
 	public Usuario transform(UsuarioRequest bean) {
 
@@ -56,7 +71,7 @@ public class UsuarioTransform {
 		entity.setDataModif(LocalDateTime.now());
 		entity.setIndEstoque(bean.getIndEstoque());
 
-		Perfil perfil = getPerfil(bean.getPerfilId());
+		Perfil perfil = getPerfil(bean.getPerfil() != null ? bean.getPerfil().getPerfilId() : null);
 		entity.setPerfil(perfil);
 
 		List<Fornecedor> fornecedores = bean.getFornecedores() == null ? null
@@ -88,24 +103,6 @@ public class UsuarioTransform {
 	private Comprador findCompradorById(CompradorRequest bean) {
 		Optional<Comprador> optional = compradorRepository.findById(bean.getCompradorId());
 		return optional.get();
-	}
-
-	public UsuarioRequest transform(Usuario entity) {
-
-//		private List<FornecedorRequest> fornecedores;
-//		private List<CompradorRequest> compradores;
-
-		return UsuarioRequest.builder()
-				.usuarioId(entity.getUsuarioId())
-				.nome(entity.getNome())
-				.email(entity.getEmail())
-				.login(entity.getLogin())
-				.senha(entity.getSenha())
-				.indEstoque(entity.getIndEstoque())
-				.dataNascimento(entity.getDataNascimento().toLocalDate())
-				.perfilId(entity.getPerfil().getPerfilId())
-				.build();
-
 	}
 
 }

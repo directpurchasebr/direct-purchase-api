@@ -8,20 +8,20 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.directpurchase.auth.request.LoginRequest;
-import br.com.directpurchase.auth.service.LoginService;
+import br.com.directpurchase.auth.service.AuthService;
 import br.com.directpurchase.exception.APIException;
 import br.com.directpurchase.exception.ValidationException;
+import br.com.directpurchase.request.LoginRequest;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-public class LoginController {
+public class AuthController {
 
 	@Autowired
-	private LoginService loginService;
+	private AuthService loginService;
 
-	@PostMapping(path = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(path = "/auth/login", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> logar(@RequestBody LoginRequest bean) throws APIException, ValidationException {
 
 		try {

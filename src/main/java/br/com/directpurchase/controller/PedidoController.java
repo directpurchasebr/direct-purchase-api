@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.directpurchase.auth.request.UsuarioRequest;
-import br.com.directpurchase.auth.service.UsuarioService;
 import br.com.directpurchase.exception.APIException;
+import br.com.directpurchase.register.service.UsuarioService;
+import br.com.directpurchase.request.UsuarioRequest;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

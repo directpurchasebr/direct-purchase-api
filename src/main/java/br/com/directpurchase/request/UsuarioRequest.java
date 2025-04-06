@@ -1,12 +1,11 @@
-package br.com.directpurchase.auth.request;
+package br.com.directpurchase.request;
 
 import java.time.LocalDate;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import br.com.directpurchase.request.CompradorRequest;
-import br.com.directpurchase.request.FornecedorRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,17 +21,21 @@ import lombok.ToString;
 @Builder
 public class UsuarioRequest {
 
+	@JsonIgnore
 	private Integer usuarioId;
 	private String nome;
 	private String email;
 	private String login;
+
+	@JsonIgnore
 	private String senha;
 	private Boolean indEstoque;
 
+	@JsonIgnore
 	@JsonFormat(pattern = "dd/MM/yyyy")
 	private LocalDate dataNascimento;
 
-	private Integer perfilId;
+	private PerfilRequest perfil;
 
 	private List<FornecedorRequest> fornecedores;
 	private List<CompradorRequest> compradores;
