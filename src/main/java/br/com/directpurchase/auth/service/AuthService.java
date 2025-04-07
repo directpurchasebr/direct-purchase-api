@@ -10,10 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import br.com.directpurchase.auth.dto.UsuarioDto;
+import br.com.directpurchase.auth.payload.UsuarioPayload;
 import br.com.directpurchase.dao.UsuarioDao;
 import br.com.directpurchase.exception.ValidationException;
 import br.com.directpurchase.response.LoginResponse;
+import br.com.directpurchase.transform.UsuarioTransform;
 import br.com.directpurchase.util.PasswordUtil;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -30,25 +31,44 @@ public class AuthService {
 	@Autowired
 	private UsuarioDao usuarioDao;
 
+	@Autowired
+	private UsuarioTransform usuarioTransform;
+
 	public LoginResponse logar(final String login, final String senha) throws ValidationException {
 
 		final String senhaEnc = PasswordUtil.encryptPassword(senha);
-		UsuarioDto retorno = usuarioDao.findUsuarioByLoginSenha(login, senhaEnc);
+		UsuarioPayload usuarioLogado = usuarioDao.findUsuarioByLoginSenha(login, senhaEnc);
+		if (usuarioLogado != null) {
+			UsuarioPayload transform = usuarioTransform.fetchUsuarioPayload(usuarioLogado.getUsuarioId());
+			String token = generateToken(transform);
 
-		if (retorno != null) {
-			String token = generateToken(retorno.getLogin());
-
-			return LoginResponse.builder().accessToken(token).nome(retorno.getNome()).email(retorno.getEmail())
-					.login(retorno.getLogin()).roles(Arrays.asList(retorno.getPerfilId().toString())).build();
+			return LoginResponse.builder()
+			        .accessToken(token)
+			        .nome(transform.getNome())
+			        .email(transform.getEmail())
+			        .login(transform.getLogin())
+			        .roles(Arrays.asList(transform.getPerfilId().toString()))
+			        .build();
 		} else {
 			throw new ValidationException("Usuario ou senha nao encontrado");
 		}
 	}
 
-	public String generateToken(String field) {
+	public String generateToken(UsuarioPayload usuario) {
 		SecretKey key = new SecretKeySpec(secret.getBytes(), Jwts.SIG.HS512.key().build().getAlgorithm());
-		return Jwts.builder().subject(field).expiration(new Date(System.currentTimeMillis() + expiration))
-				.signWith(Keys.hmacShaKeyFor(key.getEncoded())).compact();
+		return Jwts.builder()
+		        .subject(usuario.getLogin())
+		        .claim("usuarioId", usuario.getUsuarioId())
+		        .claim("nome", usuario.getNome())
+		        .claim("email", usuario.getEmail())
+		        .claim("perfilId", usuario.getPerfilId())
+		        .claim("indEstoque", usuario.getIndEstoque())
+		        .claim("status", usuario.getStatus())
+		        .claim("fornecedores", usuario.getFornecedores())
+		        .claim("compradores", usuario.getCompradores())
+		        .expiration(new Date(System.currentTimeMillis() + expiration))
+		        .signWith(Keys.hmacShaKeyFor(key.getEncoded()))
+		        .compact();
 	}
 
 }

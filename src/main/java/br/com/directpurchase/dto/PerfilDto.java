@@ -1,6 +1,4 @@
-package br.com.directpurchase.response;
-
-import java.math.BigDecimal;
+package br.com.directpurchase.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,12 +13,8 @@ import lombok.ToString;
 @Setter
 @ToString
 @Builder
-public class ProdutoResponse {
+public class PerfilDto {
 
-	private String codigo;
+	private Integer perfilId;
 	private String descricao;
-	private String marca;
-	private String unidade;
-	private BigDecimal preco;
-	private FornecedorResponse fornecedor;
 }

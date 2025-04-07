@@ -1,4 +1,4 @@
-package br.com.directpurchase.request;
+package br.com.directpurchase.dto;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -19,7 +19,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @Builder
-public class UsuarioRequest {
+public class UsuarioDto {
 
 	@JsonIgnore
 	private Integer usuarioId;
@@ -35,8 +35,8 @@ public class UsuarioRequest {
 	@JsonFormat(pattern = "dd/MM/yyyy")
 	private LocalDate dataNascimento;
 
-	private PerfilRequest perfil;
+	private PerfilDto perfil;
 
-	private List<FornecedorRequest> fornecedores;
-	private List<CompradorRequest> compradores;
+	private List<FornecedorDto> fornecedores;
+	private List<CompradorDto> compradores;
 }

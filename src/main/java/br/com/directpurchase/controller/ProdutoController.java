@@ -76,8 +76,7 @@ public class ProdutoController {
 	@GetMapping(path = "/produto/buscar/{descricao}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> buscaPorDescricao(@PathVariable("descricao") String descricao) throws APIException {
 		try {
-			
-			log.info("[{}] {} /produto/listar/", descricao);
+			log.info("[{}] /produto/buscar/", descricao);
 			
 			return ResponseEntity.ok().body(produtoService.buscaProdutos(descricao));
 		} catch (Exception e) {

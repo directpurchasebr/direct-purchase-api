@@ -4,26 +4,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.directpurchase.dto.UsuarioDto;
 import br.com.directpurchase.exception.APIException;
-import br.com.directpurchase.service.UsuarioService;
+import br.com.directpurchase.service.CompradorService;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-public class PedidoController {
+public class CompradorController {
 
 	@Autowired
-	private UsuarioService usuarioService;
+	private CompradorService compradorService;
 
-	@PostMapping(path = "/pedido/novo", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> salvar(@RequestBody UsuarioDto bean) throws APIException {
+	@GetMapping(path = "/comprador/listar", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Object> listarCompradores() throws APIException {
 		try {
-			return ResponseEntity.ok().body(usuarioService.salvarUsuario(bean));
+			log.info("[] /comprador/listar");
+
+			return ResponseEntity.ok().body(compradorService.listarCompradores());
 		} catch (Exception e) {
 			log.error("[{}] {}", e.getMessage(), e);
 			throw new APIException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());

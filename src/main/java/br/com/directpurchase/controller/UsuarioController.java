@@ -1,4 +1,4 @@
-package br.com.directpurchase.register.controller;
+package br.com.directpurchase.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.directpurchase.dto.UsuarioDto;
 import br.com.directpurchase.exception.APIException;
-import br.com.directpurchase.register.service.UsuarioService;
 import br.com.directpurchase.request.SearchUsuarioRequest;
-import br.com.directpurchase.request.UsuarioRequest;
+import br.com.directpurchase.service.UsuarioService;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -22,7 +22,7 @@ public class UsuarioController {
 	private UsuarioService usuarioService;
 
 	@PostMapping(path = "/usuario/salvar", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> salvar(@RequestBody UsuarioRequest bean) throws APIException {
+	public ResponseEntity<Object> salvar(@RequestBody UsuarioDto bean) throws APIException {
 		try {
 			return ResponseEntity.ok().body(usuarioService.salvarUsuario(bean));
 		} catch (Exception e) {

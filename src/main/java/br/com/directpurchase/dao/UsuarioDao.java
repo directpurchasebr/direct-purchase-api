@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import br.com.directpurchase.auth.dto.UsuarioDto;
+import br.com.directpurchase.auth.payload.UsuarioPayload;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.Query;
@@ -19,7 +19,7 @@ public class UsuarioDao {
 	@Autowired
 	private EntityManager roEM;
 
-	public UsuarioDto findUsuarioByLoginSenha(String login, String senha) {
+	public UsuarioPayload findUsuarioByLoginSenha(String login, String senha) {
 
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT u.usuario_id, ");
@@ -38,7 +38,7 @@ public class UsuarioDao {
 
 		try {
 			final Object[] object = (Object[]) query.getSingleResult();
-			return new UsuarioDto(object);
+			return new UsuarioPayload(object);
 		} catch (NoResultException e) {
 			log.info("[{}] Usuário não encontrado para os parâmetros [{}] [{}]", login, senha);
 		}
@@ -47,7 +47,7 @@ public class UsuarioDao {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<UsuarioDto> searchUsuario(String login, String nome, String email) {
+	public List<UsuarioPayload> searchUsuario(String login, String nome, String email) {
 
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT u.usuario_id, ");
@@ -80,7 +80,7 @@ public class UsuarioDao {
 
 		try {
 			final List<Object[]> list = query.getResultList();
-			return list.stream().map(UsuarioDto::new).collect(Collectors.toList());
+			return list.stream().map(UsuarioPayload::new).collect(Collectors.toList());
 		} catch (NoResultException e) {
 			log.info("[{}] [{}] [{}] Usuário não encontrado para os parâmetros [{}] [{}] [{}]", login, nome, email);
 		}

@@ -1,4 +1,4 @@
-package br.com.directpurchase.request;
+package br.com.directpurchase.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,8 +13,10 @@ import lombok.ToString;
 @Setter
 @ToString
 @Builder
-public class PerfilRequest {
+public class CompradorDto {
 
-	private Integer perfilId;
-	private String descricao;
+	private Integer compradorId;
+	private Integer negocioId;
+	private String codigo;
+	private String nome;
 }

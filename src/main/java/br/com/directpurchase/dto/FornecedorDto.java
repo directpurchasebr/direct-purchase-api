@@ -1,6 +1,7 @@
-package br.com.directpurchase.request;
+package br.com.directpurchase.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,7 +12,8 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class FornecedorRequest {
+@Builder
+public class FornecedorDto {
 
 	private Integer fornecedorId;
 	private String codigo;

@@ -1,20 +1,19 @@
-package br.com.directpurchase.request;
+package br.com.directpurchase.response;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString
-public class CompradorRequest {
+@Builder
+public class FornecedorResponse {
 
-	private Integer compradorId;
-	private Integer negocioId;
+	private Integer fornecedorId;
 	private String codigo;
 	private String nome;
 }
