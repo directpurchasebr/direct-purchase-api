@@ -63,7 +63,11 @@ public class UsuarioTransform {
 		        .fornecedores(fornecedores)
 		        .compradores(compradores)
 		        .build();
+	}
 
+	public UsuarioDto fetchUsuarioDto(Integer usuarioId) {
+		Usuario entity = usuarioRepository.findById(usuarioId).get();
+		return transform(entity);
 	}
 
 	public UsuarioDto transform(Usuario entity) {
@@ -80,7 +84,7 @@ public class UsuarioTransform {
 		        .nome(entity.getNome())
 		        .email(entity.getEmail())
 		        .login(entity.getLogin())
-		        .senha(entity.getSenha())
+		        // .senha(entity.getSenha()) // TODO: nao deve enviar a senha para o front
 		        .indEstoque(entity.getIndEstoque())
 		        .dataNascimento(entity.getDataNascimento().toLocalDate())
 		        .perfil(perfil)
@@ -139,6 +143,13 @@ public class UsuarioTransform {
 		        .codigo(entity.getCodigo())
 		        .nome(entity.getNome())
 		        .negocioId(entity.getNegocio().getNegocioId())
+		        .build();
+	}
+
+	public PerfilDto transform(Perfil entity) {
+		return PerfilDto.builder()
+		        .perfilId(entity.getPerfilId())
+		        .descricao(entity.getDescricao())
 		        .build();
 	}
 

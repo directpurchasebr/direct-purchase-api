@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,4 +41,15 @@ public class UsuarioController {
 			throw new APIException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 	}
+
+	@GetMapping(path = "/usuario/get", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Object> get() throws APIException {
+		try {
+			return ResponseEntity.ok().body(usuarioService.get());
+		} catch (Exception e) {
+			log.error("[{}] {}", e.getMessage(), e);
+			throw new APIException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+		}
+	}
+
 }

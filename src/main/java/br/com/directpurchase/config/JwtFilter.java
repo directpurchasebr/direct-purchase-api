@@ -15,6 +15,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import br.com.directpurchase.auth.payload.UsuarioPayload;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -36,12 +37,23 @@ public class JwtFilter extends OncePerRequestFilter {
 		if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
 			String token = authorizationHeader.substring(7);
 			SecretKey key = new SecretKeySpec(secret.getBytes(), Jwts.SIG.HS512.key().build().getAlgorithm());
+			try {
+				Claims claims = Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload();
+				UsuarioPayload usuario = convertClaimstoUsuario(claims);
 
-			Claims claims = Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload();
-			UsuarioPayload usuario = convertClaimstoUsuario(claims);
+				SecurityContextHolder.getContext()
+				        .setAuthentication(new UsernamePasswordAuthenticationToken(usuario, null, new ArrayList<>()));
 
-			SecurityContextHolder.getContext()
-			        .setAuthentication(new UsernamePasswordAuthenticationToken(usuario, null, new ArrayList<>()));
+			} catch (ExpiredJwtException e) {
+				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+				response.getWriter().write("Token expirado");
+				return;
+			} catch (Exception e) {
+				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+				response.getWriter().write("Token inválido");
+				return;
+			}
+
 		}
 		filterChain.doFilter(request, response);
 	}

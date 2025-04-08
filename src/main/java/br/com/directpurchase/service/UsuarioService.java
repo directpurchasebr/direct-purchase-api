@@ -6,9 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.directpurchase.auth.payload.UsuarioPayload;
+import br.com.directpurchase.auth.utils.AuthUtils;
 import br.com.directpurchase.dao.UsuarioDao;
 import br.com.directpurchase.dto.UsuarioDto;
 import br.com.directpurchase.entity.Usuario;
+import br.com.directpurchase.exception.ValidationException;
 import br.com.directpurchase.repository.UsuarioRepository;
 import br.com.directpurchase.request.SearchUsuarioRequest;
 import br.com.directpurchase.response.Status;
@@ -28,6 +30,9 @@ public class UsuarioService {
 	@Autowired
 	private UsuarioDao usuarioDao;
 
+	@Autowired
+	private AuthUtils authUtils;
+
 	public Status salvarUsuario(UsuarioDto bean) {
 		Usuario entity = usuarioTransform.transform(bean);
 		usuarioRepository.save(entity);
@@ -38,5 +43,15 @@ public class UsuarioService {
 
 	public List<UsuarioPayload> consultarUsuario(SearchUsuarioRequest bean) {
 		return usuarioDao.searchUsuario(bean.getLogin(), bean.getNome(), bean.getEmail());
+	}
+
+	public UsuarioDto get() throws ValidationException {
+
+		UsuarioPayload usuarioLogado = authUtils.getUsuarioLogado();
+		if (usuarioLogado == null) {
+			throw new ValidationException("Usuario não esta logado!");
+		}
+
+		return usuarioTransform.fetchUsuarioDto(usuarioLogado.getUsuarioId());
 	}
 }

@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,22 +20,17 @@ import lombok.ToString;
 @Builder
 public class UsuarioDto {
 
-	@JsonIgnore
 	private Integer usuarioId;
 	private String nome;
 	private String email;
 	private String login;
-
-	@JsonIgnore
 	private String senha;
 	private Boolean indEstoque;
 
-	@JsonIgnore
-	@JsonFormat(pattern = "dd/MM/yyyy")
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private LocalDate dataNascimento;
 
 	private PerfilDto perfil;
-
 	private List<FornecedorDto> fornecedores;
 	private List<CompradorDto> compradores;
 }
