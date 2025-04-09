@@ -31,15 +31,13 @@ public class PerfilService {
 		UsuarioPayload usuario = authUtils.getUsuarioLogado();
 		List<PerfilDto> prefils = StreamSupport.stream(perfilRepository.findAll().spliterator(), false)
 		        .map(p -> usuarioTransform.transform(p)).collect(Collectors.toList());
-
-		switch (usuario.getPerfilId()) {
-			case 1:
+		switch (usuario.getPerfil()) {
+			case "ADMIN":
 				return prefils;
-			case 2:
-				return prefils.stream().filter(f -> f.getPerfilId() != 1).collect(Collectors.toList());
+			case "USER":
+				return prefils.stream().filter(f -> f.getPerfilId() == 2).collect(Collectors.toList());
 			default:
-				return prefils.stream().filter(f -> (f.getPerfilId() != 1 && f.getPerfilId() != 2))
-				        .collect(Collectors.toList());
+				return prefils.stream().filter(f -> (f.getPerfilId() != 1)).collect(Collectors.toList());
 		}
 	}
 

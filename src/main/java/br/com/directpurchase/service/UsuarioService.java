@@ -11,8 +11,6 @@ import br.com.directpurchase.dao.UsuarioDao;
 import br.com.directpurchase.dto.UsuarioDto;
 import br.com.directpurchase.entity.Usuario;
 import br.com.directpurchase.exception.ValidationException;
-import br.com.directpurchase.repository.UsuarioRepository;
-import br.com.directpurchase.request.SearchUsuarioRequest;
 import br.com.directpurchase.response.Status;
 import br.com.directpurchase.transform.UsuarioTransform;
 import lombok.extern.slf4j.Slf4j;
@@ -20,9 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class UsuarioService {
-
-	@Autowired
-	private UsuarioRepository usuarioRepository;
 
 	@Autowired
 	private UsuarioTransform usuarioTransform;
@@ -33,16 +28,23 @@ public class UsuarioService {
 	@Autowired
 	private AuthUtils authUtils;
 
-	public Status salvarUsuario(UsuarioDto bean) {
+	public Status salvarUsuario(UsuarioDto bean) throws ValidationException {
+
 		Usuario entity = usuarioTransform.transform(bean);
-		usuarioRepository.save(entity);
+		if (entity.getUsuarioId() == null) {
+
+			// FIXME: O objeto UsuarioPayload deve ser usado para o controle do usuario
+			// logado o objeto aqui retornodo deve ser pra enviar UsuarioDto
+			List<UsuarioPayload> list = usuarioDao.searchUsuario(bean.getLogin(), bean.getEmail());
+			if (list != null && !list.isEmpty()) {
+				throw new ValidationException("Ja existe usuario com email e login ja cadastrado!");
+			}
+		}
+
+		usuarioDao.salvar(entity);
 		UsuarioDto resp = usuarioTransform.transform(entity);
 
 		return new Status(Boolean.TRUE, "Usuario cadastrado com sucesso", "", resp);
-	}
-
-	public List<UsuarioPayload> consultarUsuario(SearchUsuarioRequest bean) {
-		return usuarioDao.searchUsuario(bean.getLogin(), bean.getNome(), bean.getEmail());
 	}
 
 	public UsuarioDto get() throws ValidationException {

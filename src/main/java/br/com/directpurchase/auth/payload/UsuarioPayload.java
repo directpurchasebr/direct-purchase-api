@@ -23,14 +23,14 @@ public class UsuarioPayload {
 	private String login;
 	private String senha;
 	private Boolean indEstoque;
-	private Integer perfilId;
+	private String perfil;
 	private String status;
 	private List<Integer> fornecedores;
 	private List<Integer> compradores;
 
 	public UsuarioPayload(Object... fields) {
 		this.usuarioId = (Integer) fields[0];
-		this.perfilId = (Integer) fields[1];
+		this.perfil = (String) fields[1];
 		this.nome = (String) fields[2];
 		this.email = (String) fields[3];
 		this.login = (String) fields[4];

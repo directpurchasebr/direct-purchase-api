@@ -22,11 +22,11 @@ public class AuthController {
 	private AuthService loginService;
 
 	@PostMapping(path = "/auth/login", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> logar(@RequestBody LoginRequest bean) throws APIException, ValidationException {
+	public ResponseEntity<Object> logar(@RequestBody LoginRequest request) throws APIException, ValidationException {
 
 		try {
-			log.info("[{}] /login", bean);
-			return ResponseEntity.ok().body(loginService.logar(bean.getUsuario(), bean.getSenha()));
+			log.info("[{}] /login", request);
+			return ResponseEntity.ok().body(loginService.logar(request));
 
 		} catch (ValidationException e) {
 			return ResponseEntity.ok().body(e.getMessage());

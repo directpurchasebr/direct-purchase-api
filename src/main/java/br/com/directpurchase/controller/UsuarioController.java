@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.directpurchase.dto.UsuarioDto;
 import br.com.directpurchase.exception.APIException;
-import br.com.directpurchase.request.SearchUsuarioRequest;
+import br.com.directpurchase.exception.ValidationException;
 import br.com.directpurchase.service.UsuarioService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,18 +24,11 @@ public class UsuarioController {
 
 	@PostMapping(path = "/usuario/salvar", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> salvar(@RequestBody UsuarioDto bean) throws APIException {
+		log.info("[{}] /produto/buscar/", bean);
 		try {
 			return ResponseEntity.ok().body(usuarioService.salvarUsuario(bean));
-		} catch (Exception e) {
-			log.error("[{}] {}", e.getMessage(), e);
+		} catch (ValidationException e) {
 			throw new APIException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
-		}
-	}
-
-	@PostMapping(path = "/usuario/consultar", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> consultar(@RequestBody SearchUsuarioRequest bean) throws APIException {
-		try {
-			return ResponseEntity.ok().body(usuarioService.consultarUsuario(bean));
 		} catch (Exception e) {
 			log.error("[{}] {}", e.getMessage(), e);
 			throw new APIException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());

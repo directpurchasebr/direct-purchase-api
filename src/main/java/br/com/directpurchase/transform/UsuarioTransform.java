@@ -58,7 +58,7 @@ public class UsuarioTransform {
 		        .login(transform.getLogin())
 		        .senha(transform.getSenha())
 		        .indEstoque(transform.getIndEstoque())
-		        .perfilId(transform.getPerfil().getPerfilId())
+		        .perfil(transform.getPerfil().getDescricao())
 		        .status(null)
 		        .fornecedores(fornecedores)
 		        .compradores(compradores)
@@ -102,8 +102,17 @@ public class UsuarioTransform {
 		} else {
 			entity = new Usuario();
 			entity.setUsuarioId(null);
-			final String senhaEnc = PasswordUtil.encryptPassword(bean.getSenha());
+
+			String password = bean.getSenha();
+			if (password == null) {
+
+				// FIXME: senha padrao de primeiro acesso
+				password = "123456";
+			}
+
+			final String senhaEnc = PasswordUtil.encryptPassword(password);
 			entity.setSenha(senhaEnc);
+
 			entity.setEmail(bean.getEmail());
 			entity.setLogin(bean.getLogin());
 			entity.setDataCadastro(LocalDateTime.now());

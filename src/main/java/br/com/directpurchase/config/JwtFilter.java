@@ -64,7 +64,7 @@ public class JwtFilter extends OncePerRequestFilter {
 		Integer usuarioId = claims.get("usuarioId", Integer.class);
 		String nome = claims.get("nome", String.class);
 		String email = claims.get("email", String.class);
-		Integer perfilId = claims.get("perfilId", Integer.class);
+		String perfil = claims.get("perfil", String.class);
 		Boolean indEstoque = claims.get("indEstoque", Boolean.class);
 		String status = claims.get("status", String.class);
 		List fornecedores = claims.get("fornecedores", List.class);
@@ -75,7 +75,7 @@ public class JwtFilter extends OncePerRequestFilter {
 		        .nome(nome)
 		        .login(login)
 		        .email(email)
-		        .perfilId(perfilId)
+		        .perfil(perfil)
 		        .indEstoque(indEstoque)
 		        .status(status)
 		        .fornecedores(fornecedores)

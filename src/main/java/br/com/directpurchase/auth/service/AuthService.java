@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import br.com.directpurchase.auth.payload.UsuarioPayload;
 import br.com.directpurchase.dao.UsuarioDao;
 import br.com.directpurchase.exception.ValidationException;
+import br.com.directpurchase.request.LoginRequest;
 import br.com.directpurchase.response.LoginResponse;
 import br.com.directpurchase.transform.UsuarioTransform;
 import br.com.directpurchase.util.PasswordUtil;
@@ -34,10 +35,10 @@ public class AuthService {
 	@Autowired
 	private UsuarioTransform usuarioTransform;
 
-	public LoginResponse logar(final String login, final String senha) throws ValidationException {
+	public LoginResponse logar(LoginRequest request) throws ValidationException {
 
-		final String senhaEnc = PasswordUtil.encryptPassword(senha);
-		UsuarioPayload usuarioLogado = usuarioDao.findUsuarioByLoginSenha(login, senhaEnc);
+		final String senhaEnc = PasswordUtil.encryptPassword(request.getSenha());
+		UsuarioPayload usuarioLogado = usuarioDao.findUsuarioByLoginSenha(request.getUsuario(), senhaEnc);
 		if (usuarioLogado != null) {
 			UsuarioPayload transform = usuarioTransform.fetchUsuarioPayload(usuarioLogado.getUsuarioId());
 			String token = generateToken(transform);
@@ -47,7 +48,7 @@ public class AuthService {
 			        .nome(transform.getNome())
 			        .email(transform.getEmail())
 			        .login(transform.getLogin())
-			        .roles(Arrays.asList(transform.getPerfilId().toString()))
+			        .roles(Arrays.asList(transform.getPerfil().toString()))
 			        .build();
 		} else {
 			throw new ValidationException("Usuario ou senha nao encontrado");
@@ -61,7 +62,7 @@ public class AuthService {
 		        .claim("usuarioId", usuario.getUsuarioId())
 		        .claim("nome", usuario.getNome())
 		        .claim("email", usuario.getEmail())
-		        .claim("perfilId", usuario.getPerfilId())
+		        .claim("perfil", usuario.getPerfil())
 		        .claim("indEstoque", usuario.getIndEstoque())
 		        .claim("status", usuario.getStatus())
 		        .claim("fornecedores", usuario.getFornecedores())
