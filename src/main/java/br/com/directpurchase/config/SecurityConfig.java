@@ -24,10 +24,17 @@ public class SecurityConfig {
 		http.csrf(AbstractHttpConfigurer::disable);
 		http.sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 		http.authorizeHttpRequests(auth -> auth
+				.requestMatchers("/").permitAll()
 				.requestMatchers("/login/**").permitAll()
 				.requestMatchers("/auth/**").permitAll()
-				.requestMatchers("/api-docs/**").permitAll()
-				.requestMatchers("/swagger-ui/**").permitAll()
+				.requestMatchers(
+						"/api-docs/**",
+						"/v3/api-docs/**",
+						"/swagger-resources/**",
+						"/swagger-ui/**",
+						"/webjars/**")
+				.permitAll()
+
 				.anyRequest().authenticated());
 		http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 		return http.build();

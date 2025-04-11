@@ -20,9 +20,9 @@ spring:
       ddl-auto: update
 ---
 server:
- port: 1301
+ port: 7777
  servlet:
-  context-path: /api
+  context-path: /api-easymerge
 ---
 springdoc:
   api-docs:

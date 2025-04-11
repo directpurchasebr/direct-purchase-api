@@ -18,6 +18,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,6 +29,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
+@Builder
 
 @Entity
 @Table(name = "PRODUTO")
@@ -45,6 +47,10 @@ public class Produto implements Serializable {
 	@JoinColumn(name = "FORNECEDOR_ID", referencedColumnName = "FORNECEDOR_ID")
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Fornecedor fornecedor;
+
+	@JoinColumn(name = "USUARIO_ID", referencedColumnName = "USUARIO_ID")
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Usuario usuario;
 
 	@Column(name = "CODIGO")
 	private String codigo;

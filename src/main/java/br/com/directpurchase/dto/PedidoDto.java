@@ -20,7 +20,7 @@ import lombok.ToString;
 public class PedidoDto {
 
 	private Integer pedidoId;
-	List<PedidoProdutoDto> pedidos;
+	private List<PedidoProdutoDto> pedidos;
 	private Integer usuarioId;
 	private Integer compradorId;
 	private String codigoPedido;

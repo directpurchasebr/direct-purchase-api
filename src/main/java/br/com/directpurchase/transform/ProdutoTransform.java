@@ -12,20 +12,21 @@ public class ProdutoTransform {
 
 	public ProdutoResponse transform(Produto entity) {
 		return ProdutoResponse.builder()
-		        .codigo(removerEspacos(entity.getCodigo()))
-		        .descricao(removerEspacos(entity.getDescricao()))
-		        .unidade(removerEspacos(entity.getUnidade()))
-		        .preco(entity.getPreco())
-		        .fornecedor(transform(entity.getFornecedor()))
-		        .build();
+				.produtoId(entity.getProdutoId())
+				.codigo(removerEspacos(entity.getCodigo()))
+				.descricao(removerEspacos(entity.getDescricao()))
+				.unidade(removerEspacos(entity.getUnidade()))
+				.preco(entity.getPreco())
+				.fornecedor(transform(entity.getFornecedor()))
+				.build();
 	}
 
 	public FornecedorResponse transform(Fornecedor entity) {
 		return FornecedorResponse.builder()
-		        .fornecedorId(entity.getFornecedorId())
-		        .codigo(entity.getCodigo())
-		        .nome(entity.getNome())
-		        .build();
+				.fornecedorId(entity.getFornecedorId())
+				.codigo(entity.getCodigo())
+				.nome(entity.getNome())
+				.build();
 	}
 
 	private String removerEspacos(String str) {

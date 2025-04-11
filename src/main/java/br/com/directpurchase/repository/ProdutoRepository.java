@@ -13,7 +13,7 @@ public interface ProdutoRepository extends CrudRepository<Produto, Integer> {
 	@Query("select p from Produto p where p.codigo = :codigo and p.fornecedor.fornecedorId = :fornecedorId ")
 	public List<Produto> buscaProdutoMain(@Param("codigo") String codigo, @Param("fornecedorId") Integer fornecedorId);
 
-	@Query("select p from Produto p where upper(p.descricao) like CONCAT('%', UPPER(:descricao), '%') "
+	@Query("select p from Produto p where upper(p.descricao) like CONCAT(UPPER(:descricao), '%') "
 	        + "and p.fornecedor.fornecedorId IN (:fornecedores) ")
 	public List<Produto> buscaPorDescricao(@Param("descricao") String descricao,
 	        @Param("fornecedores") List<Integer> fornecedores);

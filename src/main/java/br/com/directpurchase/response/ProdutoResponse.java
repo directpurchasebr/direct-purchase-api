@@ -17,6 +17,7 @@ import lombok.ToString;
 @Builder
 public class ProdutoResponse {
 
+	private Integer produtoId;
 	private String codigo;
 	private String descricao;
 	private String marca;

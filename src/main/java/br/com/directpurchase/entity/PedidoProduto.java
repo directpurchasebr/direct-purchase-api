@@ -15,6 +15,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,6 +26,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
+@Builder
 
 @Entity
 @Table(name = "PEDIDO_PRODUTO")
@@ -52,6 +54,9 @@ public class PedidoProduto implements Serializable {
 
 	@Column(name = "PRECO")
 	private BigDecimal preco;
+
+	@Column(name = "PRECO_ORIGINAL")
+	private BigDecimal precoOriginal;
 
 	@JoinColumn(name = "ESTOQUE_ID", referencedColumnName = "ESTOQUE_ID")
 	@ManyToOne(fetch = FetchType.LAZY)

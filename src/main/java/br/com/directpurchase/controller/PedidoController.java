@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.directpurchase.dto.UsuarioDto;
 import br.com.directpurchase.exception.APIException;
-import br.com.directpurchase.service.UsuarioService;
+import br.com.directpurchase.request.NovoPedidoRequest;
+import br.com.directpurchase.service.PedidoService;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -18,12 +18,12 @@ import lombok.extern.slf4j.Slf4j;
 public class PedidoController {
 
 	@Autowired
-	private UsuarioService usuarioService;
+	private PedidoService pedidoService;
 
-	@PostMapping(path = "/pedido/novo", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> salvar(@RequestBody UsuarioDto bean) throws APIException {
+	@PostMapping(path = "/pedido/salvar", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Object> salvar(@RequestBody NovoPedidoRequest re) throws APIException {
 		try {
-			return ResponseEntity.ok().body(usuarioService.salvarUsuario(bean));
+			return ResponseEntity.ok().body(pedidoService.salvarPedido(null));
 		} catch (Exception e) {
 			log.error("[{}] {}", e.getMessage(), e);
 			throw new APIException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
