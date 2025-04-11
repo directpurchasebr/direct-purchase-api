@@ -1,5 +1,7 @@
 package br.com.directpurchase.transform;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Component;
 
 import br.com.directpurchase.entity.Fornecedor;
@@ -29,12 +31,7 @@ public class ProdutoTransform {
 				.build();
 	}
 
-	private String removerEspacos(String str) {
-		if (str != null) {
-			return str.trim().replaceAll("\\s+", " ");
-		} else {
-			return null;
-		}
+	private String removerEspacos(String valor) {
+		return Optional.ofNullable(valor).map(String::strip).orElse(null);
 	}
-
 }

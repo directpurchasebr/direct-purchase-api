@@ -2,7 +2,6 @@ package br.com.directpurchase.service;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.directpurchase.auth.payload.UsuarioPayload;
@@ -13,47 +12,44 @@ import br.com.directpurchase.entity.Usuario;
 import br.com.directpurchase.exception.ValidationException;
 import br.com.directpurchase.response.Status;
 import br.com.directpurchase.transform.UsuarioTransform;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Service
 public class UsuarioService {
 
-	@Autowired
-	private UsuarioTransform usuarioTransform;
+	private final UsuarioTransform usuarioTransform;
+	private final UsuarioDao usuarioDao;
+	private final AuthUtils authUtils;
 
-	@Autowired
-	private UsuarioDao usuarioDao;
+	public UsuarioService(UsuarioTransform usuarioTransform, UsuarioDao usuarioDao, AuthUtils authUtils) {
+		this.usuarioTransform = usuarioTransform;
+		this.usuarioDao = usuarioDao;
+		this.authUtils = authUtils;
+	}
 
-	@Autowired
-	private AuthUtils authUtils;
+	public Status salvarUsuario(UsuarioDto dto) throws ValidationException {
+		Usuario entity = usuarioTransform.transform(dto);
 
-	public Status salvarUsuario(UsuarioDto bean) throws ValidationException {
-
-		Usuario entity = usuarioTransform.transform(bean);
-		if (entity.getUsuarioId() == null) {
-
-			// FIXME: O objeto UsuarioPayload deve ser usado para o controle do usuario
-			// logado o objeto aqui retornodo deve ser pra enviar UsuarioDto
-			List<UsuarioPayload> list = usuarioDao.searchUsuario(bean.getLogin(), bean.getEmail());
-			if (list != null && !list.isEmpty()) {
-				throw new ValidationException("Ja existe usuario com email e login ja cadastrado!");
-			}
+		if (entity.getUsuarioId() == null && usuarioJaExiste(dto)) {
+			throw new ValidationException("Já existe usuário com e-mail e login cadastrados!");
 		}
 
 		usuarioDao.salvar(entity);
-		UsuarioDto resp = usuarioTransform.transform(entity);
+		UsuarioDto responseDto = usuarioTransform.transform(entity);
 
-		return new Status(Boolean.TRUE, "Usuario cadastrado com sucesso", "", resp);
+		return new Status(true, "Usuário cadastrado com sucesso", "", responseDto);
 	}
 
 	public UsuarioDto get() throws ValidationException {
-
 		UsuarioPayload usuarioLogado = authUtils.getUsuarioLogado();
 		if (usuarioLogado == null) {
-			throw new ValidationException("Usuario não esta logado!");
+			throw new ValidationException("Usuário não está logado!");
 		}
 
 		return usuarioTransform.fetchUsuarioDto(usuarioLogado.getUsuarioId());
+	}
+
+	private boolean usuarioJaExiste(UsuarioDto dto) {
+		List<UsuarioPayload> existentes = usuarioDao.searchUsuario(dto.getLogin(), dto.getEmail());
+		return existentes != null && !existentes.isEmpty();
 	}
 }

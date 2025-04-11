@@ -21,39 +21,43 @@ import br.com.directpurchase.util.ExcelConstants;
 public class ImportaProdutosExcel {
 
 	public Map<Integer, List<Object>> readExcelFile(InputStream file) throws EncryptedDocumentException, IOException {
-		Workbook workbook = WorkbookFactory.create(file);
-		Sheet sheet = workbook.getSheetAt(ExcelConstants.FIRST_SHEET);
-		return processa(sheet);
+		try (Workbook workbook = WorkbookFactory.create(file)) {
+			Sheet sheet = workbook.getSheetAt(ExcelConstants.FIRST_SHEET);
+			return processa(sheet);
+		}
 	}
 
 	private Map<Integer, List<Object>> processa(Sheet sheet) {
 		Map<Integer, List<Object>> data = new HashMap<>();
 		int i = 0;
 		for (Row row : sheet) {
-			data.put(i, new ArrayList<Object>());
+			// Usar computeIfAbsent para garantir a lista
+			List<Object> rowData = data.computeIfAbsent(i, k -> new ArrayList<>());
 			for (Cell cell : row) {
-				switch (cell.getCellType()) {
-				case STRING:
-					data.get(i).add(cell.getStringCellValue());
-					break;
-				case NUMERIC:
-					data.get(i).add(cell.getNumericCellValue());
-					break;
-				case BLANK:
-					continue;
-				case FORMULA:
-					continue;
-				case _NONE:
-					continue;
-				case ERROR:
-					break;
-				default:
-					data.get(i).add(cell.getRichStringCellValue());
-				}
+				// Processa as células diretamente
+				processCell(cell, rowData);
 			}
 			i++;
 		}
 		return data;
 	}
 
+	private void processCell(Cell cell, List<Object> rowData) {
+		switch (cell.getCellType()) {
+			case STRING:
+				rowData.add(cell.getStringCellValue());
+				break;
+			case NUMERIC:
+				rowData.add(cell.getNumericCellValue());
+				break;
+			// Adicionando casos em que você deseja ignorar ou tratar
+			case BLANK:
+			case FORMULA:
+			case _NONE:
+			case ERROR:
+				break;
+			default:
+				rowData.add(cell.getRichStringCellValue());
+		}
+	}
 }

@@ -1,6 +1,5 @@
 package br.com.directpurchase.dao;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +15,7 @@ import br.com.directpurchase.repository.FornecedorRespository;
 import br.com.directpurchase.repository.PerfilRepository;
 import br.com.directpurchase.repository.ProdutoRepository;
 import br.com.directpurchase.repository.UsuarioRepository;
+import jakarta.persistence.EntityNotFoundException;
 
 @Repository
 public class EntitysFetchDao {
@@ -35,34 +35,34 @@ public class EntitysFetchDao {
     @Autowired
     private ProdutoRepository produtoRepository;
 
-    public Usuario findUsuariorById(Integer usuarioId) {
-        Optional<Usuario> optional = usuarioRepository.findById(usuarioId);
-        return optional.get();
+    private <T> T findEntityById(Optional<T> entityOpt, String entityName, Integer entityId) {
+        return entityOpt
+                .orElseThrow(() -> new EntityNotFoundException(entityName + " não encontrado com ID: " + entityId));
+    }
+
+    public Usuario findUsuarioById(Integer usuarioId) {
+        return findEntityById(usuarioRepository.findById(usuarioId), "Usuario", usuarioId);
     }
 
     public Perfil getPerfil(Integer perfilId) {
-        if (perfilId == null) {
-            List<Perfil> list = perfilRepository.buscaRegular();
-            return list.stream().findFirst().get();
-        } else {
-            Optional<Perfil> perfil = perfilRepository.findById(perfilId);
-            return perfil.get();
+        if (perfilId != null) {
+            return findEntityById(perfilRepository.findById(perfilId), "Perfil", perfilId);
         }
+        return perfilRepository.buscaRegular().stream()
+                .findFirst()
+                .orElseThrow(() -> new EntityNotFoundException("Nenhum perfil regular encontrado"));
     }
 
     public Fornecedor findFornecedorById(Integer fornecedorId) {
-        Optional<Fornecedor> optional = fornecedorRespository.findById(fornecedorId);
-        return optional.get();
+        return findEntityById(fornecedorRespository.findById(fornecedorId), "Fornecedor", fornecedorId);
     }
 
     public Comprador findCompradorById(Integer compradorId) {
-        Optional<Comprador> optional = compradorRepository.findById(compradorId);
-        return optional.get();
+        return findEntityById(compradorRepository.findById(compradorId), "Comprador", compradorId);
     }
 
     public Produto findProdutoById(Integer produtoId) {
-        Optional<Produto> optional = produtoRepository.findById(produtoId);
-        return optional.get();
+        return findEntityById(produtoRepository.findById(produtoId), "Produto", produtoId);
     }
 
 }

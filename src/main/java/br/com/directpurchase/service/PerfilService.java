@@ -1,10 +1,8 @@
 package br.com.directpurchase.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.directpurchase.auth.payload.UsuarioPayload;
@@ -12,33 +10,37 @@ import br.com.directpurchase.auth.utils.AuthUtils;
 import br.com.directpurchase.dto.PerfilDto;
 import br.com.directpurchase.repository.PerfilRepository;
 import br.com.directpurchase.transform.UsuarioTransform;
-import lombok.extern.slf4j.Slf4j;
+import br.com.directpurchase.type.PerfilType;
 
-@Slf4j
 @Service
 public class PerfilService {
 
-	@Autowired
-	private UsuarioTransform usuarioTransform;
+	private final UsuarioTransform usuarioTransform;
+	private final AuthUtils authUtils;
+	private final PerfilRepository perfilRepository;
 
-	@Autowired
-	private AuthUtils authUtils;
-
-	@Autowired
-	private PerfilRepository perfilRepository;
+	public PerfilService(UsuarioTransform usuarioTransform, AuthUtils authUtils, PerfilRepository perfilRepository) {
+		this.usuarioTransform = usuarioTransform;
+		this.authUtils = authUtils;
+		this.perfilRepository = perfilRepository;
+	}
 
 	public List<PerfilDto> listarPerfil() {
 		UsuarioPayload usuario = authUtils.getUsuarioLogado();
-		List<PerfilDto> prefils = StreamSupport.stream(perfilRepository.findAll().spliterator(), false)
-		        .map(p -> usuarioTransform.transform(p)).collect(Collectors.toList());
-		switch (usuario.getPerfil()) {
-			case "ADMIN":
-				return prefils;
-			case "USER":
-				return prefils.stream().filter(f -> f.getPerfilId() == 2).collect(Collectors.toList());
-			default:
-				return prefils.stream().filter(f -> (f.getPerfilId() != 1)).collect(Collectors.toList());
-		}
-	}
+		List<PerfilDto> perfis = StreamSupport.stream(perfilRepository.findAll().spliterator(), false)
+				.map(usuarioTransform::transform).toList();
 
+		PerfilType perfil;
+		try {
+			perfil = PerfilType.valueOf(usuario.getPerfil());
+		} catch (IllegalArgumentException | NullPointerException e) {
+			throw new IllegalStateException("Perfil desconhecido: " + usuario.getPerfil());
+		}
+
+		return switch (perfil) {
+			case ADMIN -> perfis;
+			case USER -> perfis.stream().filter(f -> f.getPerfilId() == 2).toList();
+			default -> perfis.stream().filter(f -> f.getPerfilId() != 1).toList();
+		};
+	}
 }

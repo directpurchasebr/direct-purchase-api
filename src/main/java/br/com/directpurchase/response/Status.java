@@ -19,5 +19,5 @@ public class Status {
 	private Boolean status;
 	private String mensagem;
 	private String erro;
-	private Object body;
+	private Object data;
 }

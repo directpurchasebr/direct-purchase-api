@@ -1,9 +1,8 @@
 package br.com.directpurchase.excel.poi;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -13,80 +12,41 @@ import br.com.directpurchase.entity.Produto;
 import br.com.directpurchase.util.ExcelConstants;
 
 @Service
-public class ImportTamplateFour implements ImportTamplate<TemplateFour> {
+public class ImportTamplateFour extends AbstractImportTemplate<TemplateFour> {
 
 	@Override
-	public List<TemplateFour> convertTemplate(Map<Integer, List<Object>> excel) {
+	protected TemplateFour mapRow(List<Object> row) {
+		if (row == null || row.size() < 4)
+			return null;
 
-		List<TemplateFour> resp = new ArrayList<>();
+		TemplateFour t = new TemplateFour();
 
-		for (Map.Entry<Integer, List<Object>> entry : excel.entrySet()) {
-			List<Object> v = entry.getValue();
+		Number codigo = getNumber(row.get(ExcelConstants._0_CELL));
+		String descricao = getString(row.get(ExcelConstants._1_CELL));
+		String unidade = getString(row.get(ExcelConstants._2_CELL));
+		Number valor = getNumber(row.get(ExcelConstants._3_CELL));
 
-			int i = 0;
-			TemplateFour four = null;
-			for (Object o : v) {
-				if (o != null) {
-					try {
-						String convertStr = null;
-						Number convertNumber = null;
-						if (o instanceof Number) {
-							convertNumber = (Number) o;
-						} else if (o instanceof String) {
-							convertStr = (String) o;
-						}
+		if (codigo == null || descricao == null || unidade == null || valor == null)
+			return null;
 
-						if (i == ExcelConstants._0_CELL) {
-							if (convertNumber == null) {
-								continue;
-							}
-							four = new TemplateFour();
-							Integer id = convertNumber.intValue();
-							four.setCodigo(id.toString());
-						} else if (i == ExcelConstants._1_CELL) {
-							four.setDescricao(convertStr.trim());
-						} else if (i == ExcelConstants._2_CELL) {
-							four.setUnidade(convertStr.trim());
-						} else if (i == ExcelConstants._3_CELL) {
+		t.setCodigo(String.valueOf(codigo.intValue()));
+		t.setDescricao(descricao);
+		t.setUnidade(unidade);
+		t.setValor(BigDecimal.valueOf(valor.doubleValue()));
 
-//							four.setValor(new BigDecimal(StringUtils.deleteWhitespace(convertStr)));
-							four.setValor(BigDecimal.valueOf(convertNumber.doubleValue()));
-
-						}
-					} catch (Exception e) {
-					}
-					i++;
-				}
-			}
-			i = 0;
-
-			if (four != null) {
-				resp.add(four);
-			}
-
-		}
-
-		return resp;
+		return t;
 	}
-	
 
 	@Override
 	public List<Produto> convertProduto(List<TemplateFour> templates, Fornecedor fornecedor) {
-
-		List<Produto> resp = new ArrayList<>();
-		for (TemplateFour template : templates) {
-			Produto produto = new Produto();
-			produto.setProdutoId(null);
-			produto.setCodigo(template.getCodigo());
-			produto.setDescricao(template.getDescricao());
-			produto.setUnidade(template.getUnidade());
-			produto.setMarca(null);
-			produto.setPreco(template.getValor());
-			produto.setFornecedor(fornecedor);
-			resp.add(produto);
-		}
-
-		return resp;
+		return templates.stream().map(t -> Produto.builder()
+				.produtoId(null)
+				.codigo(t.getCodigo())
+				.descricao(t.getDescricao())
+				.unidade(t.getUnidade())
+				.marca(null)
+				.preco(t.getValor())
+				.fornecedor(fornecedor)
+				.build()).collect(Collectors.toList());
 	}
-
 }

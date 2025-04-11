@@ -2,6 +2,7 @@ package br.com.directpurchase.transform;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +23,15 @@ import br.com.directpurchase.util.PasswordUtil;
 @Component
 public class UsuarioTransform {
 
-	@Autowired
-	private EntitysFetchDao entitysFetchDao;
+	private final EntitysFetchDao entitysFetchDao;
+
+	public UsuarioTransform(EntitysFetchDao entitysFetchDao) {
+		this.entitysFetchDao = entitysFetchDao;
+	}
 
 	public UsuarioPayload fetchUsuarioPayload(Integer usuarioId) {
+		Usuario entity = entitysFetchDao.findUsuarioById(usuarioId);
 
-		Usuario entity = entitysFetchDao.findUsuariorById(usuarioId);
 		UsuarioDto transform = transform(entity);
 
 		List<Integer> compradores = transform.getCompradores().stream()
@@ -53,17 +57,17 @@ public class UsuarioTransform {
 	}
 
 	public UsuarioDto fetchUsuarioDto(Integer usuarioId) {
-		Usuario entity = entitysFetchDao.findUsuariorById(usuarioId);
+		Usuario entity = entitysFetchDao.findUsuarioById(usuarioId);
 		return transform(entity);
 	}
 
 	public UsuarioDto transform(Usuario entity) {
-
-		PerfilDto perfil = PerfilDto.builder().perfilId(entity.getPerfil().getPerfilId())
-				.descricao(entity.getPerfil().getDescricao()).build();
-		List<CompradorDto> compradores = entity.getCompradores().stream().map(c -> transform(c))
+		PerfilDto perfil = transform(entity.getPerfil());
+		List<CompradorDto> compradores = entity.getCompradores().stream()
+				.map(this::transform)
 				.collect(Collectors.toList());
-		List<FornecedorDto> fornecedores = entity.getFornecedores().stream().map(f -> transform(f))
+		List<FornecedorDto> fornecedores = entity.getFornecedores().stream()
+				.map(this::transform)
 				.collect(Collectors.toList());
 
 		return UsuarioDto.builder()
@@ -71,58 +75,47 @@ public class UsuarioTransform {
 				.nome(entity.getNome())
 				.email(entity.getEmail())
 				.login(entity.getLogin())
-				// .senha(entity.getSenha()) // TODO: nao deve enviar a senha para o front
+				// .senha(entity.getSenha()) **Nunca enviar senha para o front-end**
 				.indEstoque(entity.getIndEstoque())
-				.dataNascimento(entity.getDataNascimento().toLocalDate())
+				.dataNascimento(entity.getDataNascimento() != null ? entity.getDataNascimento().toLocalDate() : null)
 				.perfil(perfil)
 				.fornecedores(fornecedores)
 				.compradores(compradores)
 				.build();
-
 	}
 
 	public Usuario transform(UsuarioDto bean) {
+		Usuario entity = Optional.ofNullable(bean.getUsuarioId())
+				.map(id -> entitysFetchDao.findUsuarioById(id))
+				.orElseGet(Usuario::new); // Cria um novo objeto Usuario se o id for nulo
 
-		Usuario entity = null;
-		if (bean.getUsuarioId() != null) {
-			entity = entitysFetchDao.findUsuariorById(bean.getUsuarioId());
-		} else {
-			entity = new Usuario();
-			entity.setUsuarioId(null);
-
-			String password = bean.getSenha();
-			if (password == null) {
-
-				// FIXME: senha padrao de primeiro acesso
-				password = "123456";
-			}
-
-			final String senhaEnc = PasswordUtil.encryptPassword(password);
-			entity.setSenha(senhaEnc);
-
-			entity.setEmail(bean.getEmail());
-			entity.setLogin(bean.getLogin());
+		if (entity.getUsuarioId() == null) {
+			entity.setSenha(Optional.ofNullable(bean.getSenha())
+					.map(PasswordUtil::encryptPassword)
+					.orElse("123456")); // Senha padrão de primeiro acesso
 			entity.setDataCadastro(LocalDateTime.now());
 		}
 
 		entity.setNome(bean.getNome());
-		entity.setDataNascimento(bean.getDataNascimento() == null ? null : bean.getDataNascimento().atStartOfDay());
+		entity.setDataNascimento(bean.getDataNascimento() != null ? bean.getDataNascimento().atStartOfDay() : null);
 		entity.setDataModif(LocalDateTime.now());
 		entity.setIndEstoque(bean.getIndEstoque());
 
-		Perfil perfil = entitysFetchDao.getPerfil(bean.getPerfil() != null ? bean.getPerfil().getPerfilId() : null);
+		Perfil perfil = Optional.ofNullable(bean.getPerfil())
+				.map(p -> entitysFetchDao.getPerfil(p.getPerfilId())).orElse(null);
 		entity.setPerfil(perfil);
 
-		List<Fornecedor> fornecedores = bean.getFornecedores() == null ? null
-				: bean.getFornecedores().stream()
-						.map(f -> entitysFetchDao.findFornecedorById(f.getFornecedorId()))
-						.collect(Collectors.toList());
+		List<Fornecedor> fornecedores = Optional.ofNullable(bean.getFornecedores())
+				.map(f -> f.stream().map(f -> entitysFetchDao.findFornecedorById(f.getFornecedorId()))
+						.collect(Collectors.toList()))
+				.orElse(null);
 		entity.setFornecedores(fornecedores);
 
-		List<Comprador> compradores = bean.getCompradores() == null ? null
-				: bean.getCompradores().stream()
-						.map(c -> entitysFetchDao.findCompradorById(c.getCompradorId()))
-						.collect(Collectors.toList());
+		List<Comprador> compradores = Optional.ofNullable(bean.getCompradores())
+				.map(c -> c.stream()
+						.map(co -> entitysFetchDao.findCompradorById(co.getCompradorId()))
+						.collect(Collectors.toList()))
+				.orElse(null);
 		entity.setCompradores(compradores);
 
 		return entity;
@@ -152,5 +145,4 @@ public class UsuarioTransform {
 				.descricao(entity.getDescricao())
 				.build();
 	}
-
 }

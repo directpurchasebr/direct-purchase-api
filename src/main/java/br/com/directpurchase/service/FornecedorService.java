@@ -1,37 +1,39 @@
 package br.com.directpurchase.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.directpurchase.auth.payload.UsuarioPayload;
 import br.com.directpurchase.auth.utils.AuthUtils;
 import br.com.directpurchase.dto.FornecedorDto;
 import br.com.directpurchase.entity.Fornecedor;
+import br.com.directpurchase.exception.ValidationException;
 import br.com.directpurchase.repository.FornecedorRespository;
 import br.com.directpurchase.transform.UsuarioTransform;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Service
 public class FornecedorService {
 
-	@Autowired
-	private UsuarioTransform usuarioTransform;
+	private final UsuarioTransform usuarioTransform;
+	private final FornecedorRespository fornecedorRespository;
+	private final AuthUtils authUtils;
 
-	@Autowired
-	private FornecedorRespository fornecedorRespository;
-
-	@Autowired
-	private AuthUtils authUtils;
-
-	public List<FornecedorDto> listarFornecedores() {
-		UsuarioPayload usuario = authUtils.getUsuarioLogado();
-
-		List<Fornecedor> entitys = fornecedorRespository.buscaPorFornecedores(usuario.getFornecedores());
-		return entitys.stream().map(e -> usuarioTransform.transform(e)).collect(Collectors.toList());
+	public FornecedorService(UsuarioTransform usuarioTransform, FornecedorRespository fornecedorRespository,
+			AuthUtils authUtils) {
+		this.usuarioTransform = usuarioTransform;
+		this.fornecedorRespository = fornecedorRespository;
+		this.authUtils = authUtils;
 	}
 
+	public List<FornecedorDto> listarFornecedores() throws ValidationException {
+		UsuarioPayload usuario = authUtils.getUsuarioLogado();
+
+		if (usuario == null) {
+			throw new ValidationException("Usuário não está logado!");
+		}
+
+		List<Fornecedor> entitys = fornecedorRespository.buscaPorFornecedores(usuario.getFornecedores());
+		return entitys.stream().map(usuarioTransform::transform).toList();
+	}
 }
