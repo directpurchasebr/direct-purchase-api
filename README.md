@@ -74,9 +74,12 @@ src/main/java/br/com/directpurchase
 ├── service           # Regras de negócio
 ├── transform         # Conversão entre entidades e DTOs
 ├── request / response # Modelos para entrada/saída de dados da API
-``
+```
+
 📦 Dependências
+
 Verifique o arquivo pom.xml para uma lista completa. Algumas principais:
+
 ``
 spring-boot-starter-web
 
