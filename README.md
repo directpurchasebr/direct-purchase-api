@@ -60,6 +60,9 @@ docker build -t direct-purchase-api .
 
 # Executando
 docker run -p 8080:8080 direct-purchase-api
+```
+
+Certifique-se de que o PostgreSQL e o Redis estão rodando e acessíveis da aplicação.
 
 📁 Estrutura do Projeto
 
