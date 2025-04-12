@@ -1,5 +1,7 @@
 package br.com.directpurchase.transform;
 
+import java.time.LocalDateTime;
+
 import org.springframework.stereotype.Component;
 
 import br.com.directpurchase.dao.EntitysFetchDao;
@@ -20,7 +22,7 @@ public class PedidoTransform {
     public Pedido transform(NovoPedidoRequest body, Integer usuarioId) {
 
         var usuario = entitysFetchDao.findUsuarioById(usuarioId);
-        var comprador = entitysFetchDao.findCompradorById(body.getComprado().getCompradorId())
+        var comprador = entitysFetchDao.findCompradorById(body.getComprado().getCompradorId());
 
         return Pedido.builder()
                 // FIXME: o codigo deve seguir o pedidoId porem com um prefixo 1000000001 por exemplo
@@ -28,10 +30,7 @@ public class PedidoTransform {
                 .comprador(comprador)
                 .dataPedido(LocalDateTime.now())
                 .precoTotal(body.getValorTotal())
-
-                .pedidoProdutos(body.getProdutos().stream()
-                    .map(p -> transform(p, this)).collect(Collectors.toList())) 
-                
+                .pedidoProdutos(body.getProdutos().stream().map(p -> transform(p, null)).toList())
                     // FIXME: o indicador de estoque sera implementado futuramente (null)
                 .usuario(usuario)
                 .build();
