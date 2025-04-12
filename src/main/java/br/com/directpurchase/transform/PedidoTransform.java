@@ -1,6 +1,5 @@
 package br.com.directpurchase.transform;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import br.com.directpurchase.dao.EntitysFetchDao;
@@ -20,7 +19,7 @@ public class PedidoTransform {
 
     public Pedido transform(NovoPedidoRequest body, Integer usuarioId) {
 
-        var usuario = entitysFetchDao.findUsuariorById(usuarioId);
+        var usuario = entitysFetchDao.findUsuarioById(usuarioId);
         var comprador = entitysFetchDao.findCompradorById(body.getComprado().getCompradorId())
 
         return Pedido.builder()
