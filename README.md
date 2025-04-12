@@ -65,7 +65,7 @@ docker run -p 8080:8080 direct-purchase-api
 Certifique-se de que o PostgreSQL e o Redis estão rodando e acessíveis da aplicação.
 
 📁 Estrutura do Projeto
-
+```
 src/main/java/br/com/directpurchase
 ├── auth              # Autenticação, payloads, serviços de login
 ├── config            # Filtros de segurança e configuração Spring Security
@@ -74,10 +74,10 @@ src/main/java/br/com/directpurchase
 ├── service           # Regras de negócio
 ├── transform         # Conversão entre entidades e DTOs
 ├── request / response # Modelos para entrada/saída de dados da API
-
+``
 📦 Dependências
 Verifique o arquivo pom.xml para uma lista completa. Algumas principais:
-
+``
 spring-boot-starter-web
 
 spring-boot-starter-security
@@ -96,3 +96,4 @@ lombok
 
 poi, jxls, fastexcel
 
+```
