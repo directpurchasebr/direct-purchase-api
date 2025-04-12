@@ -1,0 +1,167 @@
+openapi: 3.0.3
+info:
+  title: Direct Purchase API
+  description: API para gestão de compras diretas com autenticação via JWT.
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080
+
+paths:
+  /login:
+    post:
+      summary: Login do usuário
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '401':
+          description: Usuário ou senha inválidos
+
+  /usuarios:
+    get:
+      summary: Obter dados do usuário logado
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Dados do usuário
+
+    post:
+      summary: Criar ou atualizar usuário
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsuarioDto'
+      responses:
+        '200':
+          description: Usuário salvo com sucesso
+
+  /pedidos:
+    post:
+      summary: Criar novo pedido
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NovoPedidoRequest'
+      responses:
+        '200':
+          description: Pedido criado com sucesso
+
+  /produtos:
+    get:
+      summary: Listar todos os produtos
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de produtos
+
+  /produtos/search:
+    get:
+      summary: Buscar produtos por descrição
+      parameters:
+        - name: descricao
+          in: query
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Produtos encontrados
+
+  /fornecedores:
+    get:
+      summary: Listar fornecedores do usuário
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de fornecedores
+
+  /compradores:
+    get:
+      summary: Listar compradores do usuário
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de compradores
+
+  /perfis:
+    get:
+      summary: Listar perfis disponíveis
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de perfis
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    LoginRequest:
+      type: object
+      properties:
+        usuario:
+          type: string
+        senha:
+          type: string
+
+    LoginResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+        nome:
+          type: string
+        email:
+          type: string
+        login:
+          type: string
+        roles:
+          type: array
+          items:
+            type: string
+
+    UsuarioDto:
+      type: object
+      properties:
+        login:
+          type: string
+        email:
+          type: string
+        nome:
+          type: string
+        perfil:
+          type: string
+
+    NovoPedidoRequest:
+      type: object
+      properties:
+        produtos:
+          type: array
+          items:
+            type: object
+          description: Lista de produtos no pedido
