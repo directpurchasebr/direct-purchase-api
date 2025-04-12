@@ -1,14 +1,15 @@
-package br.com.directpurchase.dao;
+package br.com.directpurchase.auth.dao;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import br.com.directpurchase.auth.payload.UsuarioPayload;
 import br.com.directpurchase.entity.Usuario;
+import br.com.directpurchase.entity.UsuarioSession;
 import br.com.directpurchase.repository.UsuarioRepository;
+import br.com.directpurchase.repository.UsuarioSessionRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.Query;
@@ -17,17 +18,27 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Repository
-public class UsuarioDao {
+public class AuthDao {
 
-	@Autowired
-	private EntityManager roEM;
+	private final EntityManager roEM;
+	private final UsuarioRepository usuarioRepository;
+	private final UsuarioSessionRepository sessionRepository;
 
-	@Autowired
-	private UsuarioRepository usuarioRepository;
+	public AuthDao(EntityManager roEM, UsuarioRepository usuarioRepository,
+			UsuarioSessionRepository sessionRepository) {
+		this.roEM = roEM;
+		this.usuarioRepository = usuarioRepository;
+		this.sessionRepository = sessionRepository;
+	}
 
 	@Transactional
 	public void salvar(Usuario entity) {
 		usuarioRepository.save(entity);
+	}
+
+	@Transactional
+	public void salvar(UsuarioSession entity) {
+		sessionRepository.save(entity);
 	}
 
 	public UsuarioPayload findUsuarioByLoginSenha(String login, String senha) {
@@ -79,6 +90,20 @@ public class UsuarioDao {
 
 		final List<Object[]> list = query.getResultList();
 		return list.stream().map(UsuarioPayload::new).collect(Collectors.toList());
+	}
+
+	public void intaivaSessaoUsuario(String token) {
+		List<UsuarioSession> sessions = sessionRepository.findByTokenAccess(token);
+
+		if (sessions.isEmpty()) {
+			log.info("Nenhuma sessão ativa encontrada para o token {}", token);
+			return;
+		}
+
+		sessions.forEach(session -> session.setIndSession(false));
+		sessionRepository.saveAll(sessions);
+
+		log.info("Sessões inativadas para o token {}", token);
 	}
 
 }

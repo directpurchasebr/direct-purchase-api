@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import jakarta.persistence.Basic;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -15,6 +16,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
@@ -87,6 +89,9 @@ public class Usuario implements Serializable {
 	@JoinColumn(name = "PERFIL_ID", referencedColumnName = "PERFIL_ID")
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Perfil perfil;
+
+	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+	private List<UsuarioSession> sessoes;
 
 	public Usuario(Integer usuarioId) {
 		this.usuarioId = usuarioId;

@@ -16,7 +16,7 @@ public class ImportTamplateTwo extends AbstractImportTemplate<TemplateTwo> {
 
 	@Override
 	protected TemplateTwo mapRow(List<Object> row) {
-		if (row == null || row.size() < 4)
+		if (row == null || row.size() < 5)
 			return null;
 
 		TemplateTwo t = new TemplateTwo();

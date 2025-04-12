@@ -27,6 +27,7 @@ public class UsuarioPayload {
 	private String status;
 	private List<Integer> fornecedores;
 	private List<Integer> compradores;
+	private UsuarioSessionPayload session;
 
 	public UsuarioPayload(Object... fields) {
 		this.usuarioId = (Integer) fields[0];

@@ -16,7 +16,7 @@ public class ImportTamplateThree extends AbstractImportTemplate<TemplateThree> {
 
 	@Override
 	protected TemplateThree mapRow(List<Object> row) {
-		if (row == null || row.size() < 4)
+		if (row == null || row.size() < 6)
 			return null;
 
 		TemplateThree t = new TemplateThree();
