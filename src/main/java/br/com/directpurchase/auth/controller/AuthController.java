@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,7 +23,7 @@ public class AuthController {
 	private AuthService loginService;
 
 	@PostMapping(path = "/auth/login", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> logar(@RequestBody LoginRequest request) throws APIException, ValidationException {
+	public ResponseEntity<Object> login(@RequestBody LoginRequest request) throws APIException, ValidationException {
 
 		try {
 			log.info("[{}] /login", request);
@@ -30,6 +31,19 @@ public class AuthController {
 
 		} catch (ValidationException e) {
 			return ResponseEntity.ok().body(e.getMessage());
+
+		} catch (Exception e) {
+			log.error("[{}] {}", e.getMessage(), e);
+			throw new APIException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+		}
+	}
+
+	@GetMapping(path = "/auth/logout", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Object> logout() throws APIException, ValidationException {
+
+		try {
+			log.info("[{}] /logout");
+			return ResponseEntity.ok().body(loginService.logout());
 
 		} catch (Exception e) {
 			log.error("[{}] {}", e.getMessage(), e);

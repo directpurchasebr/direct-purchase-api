@@ -11,7 +11,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
@@ -60,12 +59,10 @@ public class UsuarioSession implements Serializable {
     @Column(name = "LANGUAGE")
     private String language;
 
-    @Column(name = "TOKEN_USER")
-    @Lob
+    @Column(name = "TOKEN_USER", length = 4096)
     private String tokenUser;
 
-    @Column(name = "TOKEN_ACCESS")
-    @Lob
+    @Column(name = "TOKEN_ACCESS", length = 4096)
     private String tokenAccess;
 
     @Basic(optional = false)
