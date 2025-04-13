@@ -13,7 +13,12 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @ToString
 @SuperBuilder
-public class CompradorDto extends PessoaDto {
-
-	private Integer compradorId;
+public class PessoaBancoDto {
+    private Integer pessoaBancoId;
+    private String banco;
+    private String agencia;
+    private String conta;
+    private String tipoConta;
+    private String titular;
+    private String cnpjTitular;
 }

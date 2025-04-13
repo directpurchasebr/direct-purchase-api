@@ -24,10 +24,14 @@ public class ProdutoTransform {
 	}
 
 	public FornecedorResponse transform(Fornecedor entity) {
+
+		String nome = Optional.ofNullable(entity.getPessoa().getNomeFantasia())
+				.orElse(entity.getPessoa().getNome());
+
 		return FornecedorResponse.builder()
 				.fornecedorId(entity.getFornecedorId())
-				.codigo(entity.getCodigo())
-				.nome(entity.getNome())
+				.codigo(entity.getPessoa().getCodigo())
+				.nome(nome)
 				.build();
 	}
 

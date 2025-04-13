@@ -1,22 +1,20 @@
 package br.com.directpurchase.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
-@Builder
-public class FornecedorDto {
+@SuperBuilder
+public class FornecedorDto extends PessoaDto {
 
 	private Integer fornecedorId;
-	private String codigo;
-	private String nome;
 	private String layoutExcel;
 }

@@ -13,7 +13,13 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @ToString
 @SuperBuilder
-public class CompradorDto extends PessoaDto {
-
-	private Integer compradorId;
+public class PessoaEnderecoDto {
+    private Integer pessoaEnderecoId;
+    private String logradouro;
+    private String numero;
+    private String complemento;
+    private String bairro;
+    private String cidade;
+    private String estado;
+    private String cep;
 }
