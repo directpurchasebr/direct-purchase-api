@@ -27,7 +27,7 @@ public class ProdutoService {
 	public List<ProdutoResponse> buscaProdutos(String descricao) {
 		UsuarioPayload usuario = authUtils.getUsuarioLogado();
 
-		return produtoRepository.buscaPorDescricao(descricao, usuario.getFornecedores())
+		return produtoRepository.buscaPorDescricao(usuario.getUsuarioId(), descricao, usuario.getFornecedores())
 				.stream().map(produtoTransform::transform).toList();
 	}
 

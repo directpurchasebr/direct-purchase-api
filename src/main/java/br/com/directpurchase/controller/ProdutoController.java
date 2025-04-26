@@ -9,13 +9,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
+import br.com.directpurchase.excel.request.ProdutosExcelRequest;
 import br.com.directpurchase.excel.request.ProdutosExcelTextRequest;
 import br.com.directpurchase.excel.service.ExcelImportService;
 import br.com.directpurchase.exception.APIException;
@@ -32,14 +32,14 @@ public class ProdutoController {
 	@Autowired
 	private ExcelImportService excelImportService;
 
-	@PostMapping(path = "/produto/importaProdutosExcel", produces = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public ResponseEntity<Object> importaProdutosExcel(@RequestParam Integer fornecedorId,
-			@RequestParam MultipartFile file) throws APIException {
+	@PostMapping(path = "/produto/importaProdutosExcel", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Object> importaProdutosExcel(@ModelAttribute ProdutosExcelRequest request)
+			throws APIException {
 		try {
-			log.info("[{}] {} /produto/importaProdutosExcel", fornecedorId, file);
+			log.info("[{}] [{}] /produto/importaProdutosExcel", request.getFornecedorId(), request.getFile());
 
-			InputStream is = file.getInputStream();
-			return ResponseEntity.ok().body(excelImportService.importaExcel(fornecedorId, is));
+			InputStream is = request.getFile().getInputStream();
+			return ResponseEntity.ok().body(excelImportService.importaExcel(request.getFornecedorId(), is));
 		} catch (Exception e) {
 			log.error("[{}] {}", e.getMessage(), e);
 			throw new APIException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
@@ -77,7 +77,7 @@ public class ProdutoController {
 	public ResponseEntity<Object> buscaPorDescricao(@PathVariable("descricao") String descricao) throws APIException {
 		try {
 			log.info("[{}] /produto/buscar/", descricao);
-			
+
 			return ResponseEntity.ok().body(produtoService.buscaProdutos(descricao));
 		} catch (Exception e) {
 			log.error("[{}] {}", e.getMessage(), e);

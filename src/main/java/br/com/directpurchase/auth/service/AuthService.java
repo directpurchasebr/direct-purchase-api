@@ -85,6 +85,11 @@ public class AuthService {
 		return new Status(true, "OK", "", usuario.getSession());
 	}
 
+	public Object validateToken() {
+		UsuarioPayload usuario = authUtils.getUsuarioLogado();
+		return new Status(true, "OK", "", usuario.getSession());
+	}
+
 	public void intaivaSessaoUsuario(String token) {
 		authDao.intaivaSessaoUsuario(token);
 	}

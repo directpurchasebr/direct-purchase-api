@@ -4,14 +4,15 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import br.com.directpurchase.dto.TemplateTwo;
 import br.com.directpurchase.entity.Fornecedor;
 import br.com.directpurchase.entity.Produto;
+import br.com.directpurchase.entity.Usuario;
 import br.com.directpurchase.util.ExcelConstants;
 
-@Service
+@Component
 public class ImportTamplateTwo extends AbstractImportTemplate<TemplateTwo> {
 
 	@Override
@@ -21,7 +22,7 @@ public class ImportTamplateTwo extends AbstractImportTemplate<TemplateTwo> {
 
 		TemplateTwo t = new TemplateTwo();
 
-		Number codigo = getNumber(row.get(ExcelConstants._0_CELL));
+		String codigo = getString(row.get(ExcelConstants._0_CELL));
 		String descricao = getString(row.get(ExcelConstants._1_CELL));
 		String unidade = getString(row.get(ExcelConstants._2_CELL));
 		String marca = getString(row.get(ExcelConstants._3_CELL));
@@ -30,7 +31,7 @@ public class ImportTamplateTwo extends AbstractImportTemplate<TemplateTwo> {
 		if (codigo == null || descricao == null || unidade == null || valor == null)
 			return null;
 
-		t.setCodigo(String.valueOf(codigo.intValue()));
+		t.setCodigo(codigo);
 		t.setDescricao(descricao);
 		t.setQuantidade(unidade);
 		t.setMarca(marca);
@@ -40,7 +41,7 @@ public class ImportTamplateTwo extends AbstractImportTemplate<TemplateTwo> {
 	}
 
 	@Override
-	public List<Produto> convertProduto(List<TemplateTwo> templates, Fornecedor fornecedor) {
+	public List<Produto> convertProduto(List<TemplateTwo> templates, Usuario usuario, Fornecedor fornecedor) {
 		return templates.stream().map(t -> Produto.builder()
 				.produtoId(null)
 				.codigo(t.getCodigo())
@@ -48,6 +49,7 @@ public class ImportTamplateTwo extends AbstractImportTemplate<TemplateTwo> {
 				.unidade(t.getQuantidade())
 				.marca(t.getMarca())
 				.preco(t.getValor())
+				.usuario(usuario)
 				.fornecedor(fornecedor)
 				.build()).collect(Collectors.toList());
 	}

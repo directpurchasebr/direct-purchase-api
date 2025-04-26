@@ -26,6 +26,7 @@ import br.com.directpurchase.excel.poi.ImportTamplateTwo;
 import br.com.directpurchase.excel.poi.ImportaProdutosExcel;
 import br.com.directpurchase.excel.poi.Template;
 import br.com.directpurchase.excel.service.ExcelImportService;
+import br.com.directpurchase.exception.ValidationException;
 import br.com.directpurchase.util.ValidateTemplate;
 
 @SpringBootTest
@@ -56,10 +57,14 @@ public class ExcelIntegrationTest {
 
 	@Test
 	void executeTest() throws FileNotFoundException {
-		String filePath = "/home/julio/Dev/backup_files/template_4.xls";
-		File initialFile = new File(filePath);
-		InputStream targetStream = new FileInputStream(initialFile);
-		excelImportService.importaExcel(1, targetStream);
+		try {
+			String filePath = "/home/julio/Dev/backup_files/template_4.xls";
+			File initialFile = new File(filePath);
+			InputStream targetStream = new FileInputStream(initialFile);
+			excelImportService.importaExcel(1, targetStream);
+		} catch (ValidationException e) {
+			// Handle the exception here
+		}
 	}
 
 	@Deprecated

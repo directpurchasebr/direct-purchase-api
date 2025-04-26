@@ -24,7 +24,6 @@ public class AuthController {
 
 	@PostMapping(path = "/auth/login", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> login(@RequestBody LoginRequest request) throws APIException, ValidationException {
-
 		try {
 			log.info("[{}] /login", request);
 			return ResponseEntity.ok().body(loginService.logar(request));
@@ -40,7 +39,6 @@ public class AuthController {
 
 	@GetMapping(path = "/auth/logout", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> logout() throws APIException, ValidationException {
-
 		try {
 			log.info("[{}] /logout");
 			return ResponseEntity.ok().body(loginService.logout());
@@ -51,4 +49,15 @@ public class AuthController {
 		}
 	}
 
+	@GetMapping(path = "/auth/validateToken", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Object> validateToken() throws APIException, ValidationException {
+		try {
+			log.info("[{}] /validateToken");
+			return ResponseEntity.ok().body(loginService.validateToken());
+
+		} catch (Exception e) {
+			log.error("[{}] {}", e.getMessage(), e);
+			throw new APIException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+		}
+	}
 }

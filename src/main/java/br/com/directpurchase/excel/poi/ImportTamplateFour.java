@@ -4,14 +4,15 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import br.com.directpurchase.dto.TemplateFour;
 import br.com.directpurchase.entity.Fornecedor;
 import br.com.directpurchase.entity.Produto;
+import br.com.directpurchase.entity.Usuario;
 import br.com.directpurchase.util.ExcelConstants;
 
-@Service
+@Component
 public class ImportTamplateFour extends AbstractImportTemplate<TemplateFour> {
 
 	@Override
@@ -38,7 +39,7 @@ public class ImportTamplateFour extends AbstractImportTemplate<TemplateFour> {
 	}
 
 	@Override
-	public List<Produto> convertProduto(List<TemplateFour> templates, Fornecedor fornecedor) {
+	public List<Produto> convertProduto(List<TemplateFour> templates, Usuario usuario, Fornecedor fornecedor) {
 		return templates.stream().map(t -> Produto.builder()
 				.produtoId(null)
 				.codigo(t.getCodigo())
@@ -46,6 +47,7 @@ public class ImportTamplateFour extends AbstractImportTemplate<TemplateFour> {
 				.unidade(t.getUnidade())
 				.marca(null)
 				.preco(t.getValor())
+				.usuario(usuario)
 				.fornecedor(fornecedor)
 				.build()).collect(Collectors.toList());
 	}
