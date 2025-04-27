@@ -19,7 +19,7 @@ public class NovoPedidoRequest {
 
     private Integer pedidoId;
     private String codigoPedido;
-    private CompradorDto comprado;
+    private CompradorDto comprador;
     private List<ProdutoRequest> produtos;
     private BigDecimal valorTotal;
     private String observacao;

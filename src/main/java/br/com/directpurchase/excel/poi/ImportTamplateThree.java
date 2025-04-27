@@ -28,7 +28,7 @@ public class ImportTamplateThree extends AbstractImportTemplate<TemplateThree> {
 		String marca = getString(row.get(ExcelConstants._3_CELL));
 		String quantidade = getString(row.get(ExcelConstants._4_CELL));
 		Number valor = getNumber(row.get(ExcelConstants._5_CELL));
-		String caixa = getString(row.get(ExcelConstants._6_CELL));
+		String caixa = getString(row.size() > ExcelConstants._6_CELL ? row.get(ExcelConstants._6_CELL) : null);
 
 		if (codigo == null || descricao == null || valor == null)
 			return null;

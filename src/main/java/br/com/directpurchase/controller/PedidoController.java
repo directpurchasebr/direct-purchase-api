@@ -21,9 +21,9 @@ public class PedidoController {
 	private PedidoService pedidoService;
 
 	@PostMapping(path = "/pedido/salvar", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> salvar(@RequestBody NovoPedidoRequest re) throws APIException {
+	public ResponseEntity<Object> salvar(@RequestBody NovoPedidoRequest request) throws APIException {
 		try {
-			return ResponseEntity.ok().body(pedidoService.salvarPedido(null));
+			return ResponseEntity.ok().body(pedidoService.salvarPedido(request));
 		} catch (Exception e) {
 			log.error("[{}] {}", e.getMessage(), e);
 			throw new APIException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());

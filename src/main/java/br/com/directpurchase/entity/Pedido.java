@@ -73,6 +73,5 @@ public class Pedido implements Serializable {
 		super();
 		this.pedidoId = pedidoId;
 	}
-
 	
 }

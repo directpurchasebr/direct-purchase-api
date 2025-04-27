@@ -13,10 +13,17 @@ import br.com.directpurchase.response.ProdutoResponse;
 public class ProdutoTransform {
 
 	public ProdutoResponse transform(Produto entity) {
+
+		StringBuilder descricao = new StringBuilder();
+		descricao.append(null == entity.getDescricao() ? "" : removerEspacos(entity.getDescricao().toUpperCase()));
+		descricao.append(" - ");
+		descricao.append(null == entity.getFornecedor() ? ""
+				: removerEspacos(entity.getFornecedor().getPessoa().getNomeFantasia()));
+
 		return ProdutoResponse.builder()
 				.produtoId(entity.getProdutoId())
 				.codigo(removerEspacos(entity.getCodigo()))
-				.descricao(removerEspacos(entity.getDescricao()))
+				.descricao(descricao.toString())
 				.unidade(removerEspacos(entity.getUnidade()))
 				.preco(entity.getPreco())
 				.fornecedor(transform(entity.getFornecedor()))

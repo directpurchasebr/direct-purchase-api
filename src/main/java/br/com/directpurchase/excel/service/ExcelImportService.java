@@ -68,7 +68,6 @@ public class ExcelImportService {
 
 		Usuario usuario = new Usuario(usuarioLogado.getUsuarioId());
 		Fornecedor fornecedor = new Fornecedor(fornecedorId);
-		// Fornecedor fornecedor = fornecedorRespository.findById(fornecedorId).get();
 
 		List<Produto> auxList = new ArrayList<>();
 		try {

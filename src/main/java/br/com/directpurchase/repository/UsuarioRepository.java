@@ -1,9 +1,9 @@
 package br.com.directpurchase.repository;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import br.com.directpurchase.entity.Usuario;
 
-public interface UsuarioRepository  extends CrudRepository<Usuario, Integer> {
+public interface UsuarioRepository  extends JpaRepository<Usuario, Integer> {
 
 }

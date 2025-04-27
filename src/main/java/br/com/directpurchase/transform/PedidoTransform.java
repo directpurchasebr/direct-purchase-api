@@ -1,6 +1,7 @@
 package br.com.directpurchase.transform;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.stereotype.Component;
 
@@ -22,18 +23,21 @@ public class PedidoTransform {
     public Pedido transform(NovoPedidoRequest body, Integer usuarioId) {
 
         var usuario = entitysFetchDao.findUsuarioById(usuarioId);
-        var comprador = entitysFetchDao.findCompradorById(body.getComprado().getCompradorId());
+        var comprador = entitysFetchDao.findCompradorById(body.getComprador().getCompradorId());
 
-        return Pedido.builder()
-                // FIXME: o codigo deve seguir o pedidoId porem com um prefixo 1000000001 por exemplo
-                .codigoPedido(body.getCodigoPedido())
+        Pedido pedido = Pedido.builder()
+                // FIXME: o codigo deve seguir o pedidoId porem com um prefixo 1000000001 por
                 .comprador(comprador)
                 .dataPedido(LocalDateTime.now())
                 .precoTotal(body.getValorTotal())
-                .pedidoProdutos(body.getProdutos().stream().map(p -> transform(p, null)).toList())
-                    // FIXME: o indicador de estoque sera implementado futuramente (null)
+                // FIXME: o indicador de estoque sera implementado futuramente (null)
                 .usuario(usuario)
                 .build();
+
+        List<PedidoProduto> produtos = body.getProdutos().stream().map(p -> transform(p, pedido)).toList();
+        pedido.setPedidoProdutos(produtos);
+
+        return pedido;
     }
 
     public PedidoProduto transform(ProdutoRequest body, Pedido pedido) {
@@ -48,6 +52,7 @@ public class PedidoTransform {
                 .preco(body.getPreco())
                 .produto(produto)
                 .quantidade(body.getQuantidade())
+                .precoOriginal(produto.getPreco())
                 .build();
     }
 
