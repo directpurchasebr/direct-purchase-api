@@ -6,14 +6,14 @@ API REST em Java com Spring Boot para gerenciamento de pedidos diretos. Focada e
 
 - **Java 17**
 - **Spring Boot 3.4.1**
-- Spring Security + JWT
-- Spring Data JPA
-- PostgreSQL
-- Redis
-- Swagger/OpenAPI
-- Flyway (migrations)
-- Apache POI / JXLS / FastExcel (para arquivos Excel)
-- Lombok
+- **Spring Security + JWT**
+- **Spring Data JPA**
+- **PostgreSQL**
+- **Redis**
+- **Swagger/OpenAPI**
+- **Flyway (migrations)**
+- **Apache POI / JXLS / FastExcel (para arquivos Excel)**
+- **Lombok**
 
 ## ⚙️ Funcionalidades
 
@@ -50,7 +50,7 @@ API REST em Java com Spring Boot para gerenciamento de pedidos diretos. Focada e
 ## 📄 Documentação da API
 
 Disponível após subir a aplicação:
-
+- http://localhost:7777/directpurchase/swagger-ui.html
 
 ## 🐳 Rodando com Docker
 
@@ -59,7 +59,7 @@ Disponível após subir a aplicação:
 docker build -t direct-purchase-api .
 
 # Executando
-docker run -p 8080:8080 direct-purchase-api
+docker run -p 8080:7777 direct-purchase-api
 ```
 
 Certifique-se de que o PostgreSQL e o Redis estão rodando e acessíveis da aplicação.
