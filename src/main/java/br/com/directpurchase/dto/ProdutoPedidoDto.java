@@ -1,10 +1,9 @@
-package br.com.directpurchase.request;
+package br.com.directpurchase.dto;
 
 import java.math.BigDecimal;
 
-import br.com.directpurchase.dto.FornecedorDto;
-import br.com.directpurchase.response.ProdutoResponse;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,10 +13,11 @@ import lombok.ToString;
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 @ToString
-public class ProdutoRequest {
+public class ProdutoPedidoDto {
 
-    private ProdutoResponse produto;
+    private ProdutoDto produto;
     private FornecedorDto fornecedor;
     private String codigo;
     private String descricaoProduto;

@@ -24,7 +24,7 @@ public class UsuarioController {
 
 	@PostMapping(path = "/usuario/salvar", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> salvar(@RequestBody UsuarioDto bean) throws APIException {
-		log.info("[{}] /produto/buscar/", bean);
+		log.info("[{}] /usuario/salvar/", bean);
 		try {
 			return ResponseEntity.ok().body(usuarioService.salvarUsuario(bean));
 		} catch (ValidationException e) {

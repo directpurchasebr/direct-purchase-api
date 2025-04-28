@@ -1,4 +1,4 @@
-package br.com.directpurchase.response;
+package br.com.directpurchase.dto;
 
 import java.math.BigDecimal;
 
@@ -15,7 +15,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @Builder
-public class ProdutoResponse {
+public class ProdutoDto {
 
 	private Integer produtoId;
 	private String codigo;
@@ -23,5 +23,5 @@ public class ProdutoResponse {
 	private String marca;
 	private String unidade;
 	private BigDecimal preco;
-	private FornecedorResponse fornecedor;
+	private FornecedorDto fornecedor;
 }

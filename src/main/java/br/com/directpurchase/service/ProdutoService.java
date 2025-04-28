@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 
 import br.com.directpurchase.auth.payload.UsuarioPayload;
 import br.com.directpurchase.auth.utils.AuthUtils;
+import br.com.directpurchase.dto.ProdutoDto;
 import br.com.directpurchase.repository.ProdutoRepository;
-import br.com.directpurchase.response.ProdutoResponse;
 import br.com.directpurchase.transform.ProdutoTransform;
 
 @Service
@@ -24,14 +24,14 @@ public class ProdutoService {
 		this.authUtils = authUtils;
 	}
 
-	public List<ProdutoResponse> buscaProdutos(String descricao) {
+	public List<ProdutoDto> buscaProdutos(String descricao) {
 		UsuarioPayload usuario = authUtils.getUsuarioLogado();
 
 		return produtoRepository.buscaPorDescricao(usuario.getUsuarioId(), descricao, usuario.getFornecedores())
 				.stream().map(produtoTransform::transform).toList();
 	}
 
-	public List<ProdutoResponse> listarProdutos() {
+	public List<ProdutoDto> listarProdutos() {
 		return StreamSupport.stream(produtoRepository.findAll().spliterator(), false)
 				.map(produtoTransform::transform).toList();
 	}
