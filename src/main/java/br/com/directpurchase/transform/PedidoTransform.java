@@ -1,12 +1,15 @@
 package br.com.directpurchase.transform;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Component;
 
 import br.com.directpurchase.dao.EntitysFetchDao;
 import br.com.directpurchase.dto.PedidoDto;
+import br.com.directpurchase.dto.ProdutoDto;
 import br.com.directpurchase.dto.ProdutoPedidoDto;
 import br.com.directpurchase.entity.Pedido;
 import br.com.directpurchase.entity.PedidoProduto;
@@ -59,27 +62,35 @@ public class PedidoTransform {
     }
 
     public PedidoDto transform(Pedido entity) {
+        String codigo = entity.getCodigoPedido();
+        String[] partes = codigo.split("-");
+        String numeroPedido = partes[1];
+
         return PedidoDto.builder()
                 .pedidoId(entity.getPedidoId())
-                .codigoPedido(entity.getCodigoPedido())
+                .codigoPedido(numeroPedido)
                 .comprador(usuarioTransform.transform(entity.getComprador()))
-                .produtos(entity.getPedidoProdutos().stream().map(this::transformA).toList())
+                .produtos(entity.getPedidoProdutos().stream().map(this::transform).toList())
                 .valorTotal(entity.getPrecoTotal())
-                .observacao("")
-                .status("")
+                .observacao(entity.getObservacao())
+                .status(Optional.ofNullable(entity.getStatus()).orElse("DEFINITIVO"))
                 .build();
     }
 
-    public ProdutoPedidoDto transformA(PedidoProduto entity) {
+    public ProdutoPedidoDto transform(PedidoProduto entity) {
+        ProdutoDto produto = produtoTransform.transform(entity.getProduto());
+        BigDecimal precoTotal = entity.getPreco().multiply(BigDecimal.valueOf(entity.getQuantidade()));
+
         return ProdutoPedidoDto.builder()
-                .produto(produtoTransform.transform(entity.getProduto()))
-                .fornecedor(null)
-                .codigo(null)
-                .descricaoProduto(null)
-                .unidade(null)
+                .produto(produto)
+                .fornecedor(produto.getFornecedor())
+                .descricaoFornecedor(produto.getFornecedor().getNome())
+                .codigo(produto.getCodigo())
+                .descricaoProduto(produto.getDescricao())
+                .unidade(produto.getUnidade())
                 .quantidade(entity.getQuantidade())
                 .preco(entity.getPreco())
-                .precoTotal(entity.getPrecoOriginal())
+                .precoTotal(precoTotal)
                 .build();
     }
 }

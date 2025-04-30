@@ -69,9 +69,15 @@ public class Pedido implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	private LocalDateTime dataPedido;
 
+	@Column(name = "OBSERVACAO")
+	private String observacao;
+
+	@Column(name = "STATUS")
+	private String status;
+
 	public Pedido(Integer pedidoId) {
 		super();
 		this.pedidoId = pedidoId;
 	}
-	
+
 }

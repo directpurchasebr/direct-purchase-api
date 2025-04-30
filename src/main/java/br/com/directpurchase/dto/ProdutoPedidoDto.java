@@ -19,6 +19,7 @@ public class ProdutoPedidoDto {
 
     private ProdutoDto produto;
     private FornecedorDto fornecedor;
+    private String descricaoFornecedor;
     private String codigo;
     private String descricaoProduto;
     private Integer quantidade;
