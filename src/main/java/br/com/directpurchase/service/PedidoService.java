@@ -11,6 +11,7 @@ import br.com.directpurchase.dto.PedidoDto;
 import br.com.directpurchase.entity.Pedido;
 import br.com.directpurchase.exception.ValidationException;
 import br.com.directpurchase.repository.PedidoRepository;
+import br.com.directpurchase.request.ConsultaPedido;
 import br.com.directpurchase.response.Status;
 import br.com.directpurchase.transform.PedidoTransform;
 
@@ -32,10 +33,6 @@ public class PedidoService {
 
     public Status salvarPedido(PedidoDto request) throws ValidationException {
         UsuarioPayload usuario = authUtils.getUsuarioLogado();
-        if (usuario == null) {
-            throw new ValidationException("Usuário não está logado!");
-        }
-
         Integer ultimoCodigo = pedidoRepository.buscarUltimoCodigoPorUsuario(usuario.getUsuarioId());
         int proximoCodigo = (ultimoCodigo != null ? ultimoCodigo : 0) + 1;
 
@@ -49,11 +46,19 @@ public class PedidoService {
 
     public List<PedidoDto> listarPedidos() throws ValidationException {
         UsuarioPayload usuario = authUtils.getUsuarioLogado();
-        if (usuario == null) {
-            throw new ValidationException("Usuário não está logado!");
-        }
-
-        List<Pedido> entitys = pedidoRepository.buscar(usuario.getUsuarioId());
+        List<Pedido> entitys = pedidoRepository.listar(usuario.getUsuarioId());
         return entitys.stream().map(pedidoTransform::transform).toList();
     }
+
+    public List<PedidoDto> consultarPedidos(ConsultaPedido request) throws ValidationException {
+        UsuarioPayload usuario = authUtils.getUsuarioLogado();
+        List<Pedido> entitys = pedidoDao.buscar(
+                usuario.getUsuarioId(),
+                request.getCodigoPedido(),
+                request.getDataPedido(),
+                request.getCompradorId());
+
+        return entitys.stream().map(pedidoTransform::transform).toList();
+    }
+
 }

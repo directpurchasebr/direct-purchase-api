@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.directpurchase.dto.PedidoDto;
 import br.com.directpurchase.exception.APIException;
+import br.com.directpurchase.request.ConsultaPedido;
 import br.com.directpurchase.service.PedidoService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,11 +35,23 @@ public class PedidoController {
 	}
 
 	@GetMapping(path = "/pedido/listar", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> listarPerfil() throws APIException {
+	public ResponseEntity<Object> listar() throws APIException {
 		try {
 			log.info("[] /pedido/listar");
 
 			return ResponseEntity.ok().body(pedidoService.listarPedidos());
+		} catch (Exception e) {
+			log.error("[{}] {}", e.getMessage(), e);
+			throw new APIException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+		}
+	}
+
+	@PostMapping(path = "/pedido/buscar", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Object> buscar(@RequestBody ConsultaPedido request) throws APIException {
+		try {
+			log.info("[{}] /pedido/buscar/", request);
+
+			return ResponseEntity.ok().body(pedidoService.consultarPedidos(request));
 		} catch (Exception e) {
 			log.error("[{}] {}", e.getMessage(), e);
 			throw new APIException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());

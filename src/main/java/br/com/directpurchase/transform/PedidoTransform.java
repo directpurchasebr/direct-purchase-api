@@ -69,6 +69,7 @@ public class PedidoTransform {
         return PedidoDto.builder()
                 .pedidoId(entity.getPedidoId())
                 .codigoPedido(numeroPedido)
+                .dataPedido(entity.getDataPedido())
                 .comprador(usuarioTransform.transform(entity.getComprador()))
                 .produtos(entity.getPedidoProdutos().stream().map(this::transform).toList())
                 .valorTotal(entity.getPrecoTotal())

@@ -1,6 +1,7 @@
 package br.com.directpurchase.dto;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -20,9 +21,10 @@ public class PedidoDto {
 
     private Integer pedidoId;
     private String codigoPedido;
-    private CompradorDto comprador;
-    private List<ProdutoPedidoDto> produtos;
+    private LocalDateTime dataPedido;
     private BigDecimal valorTotal;
     private String observacao;
     private String status;
+    private CompradorDto comprador;
+    private List<ProdutoPedidoDto> produtos;
 }

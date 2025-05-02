@@ -28,11 +28,6 @@ public class CompradorService {
 
 	public List<CompradorDto> listarCompradores() throws ValidationException {
 		UsuarioPayload usuario = authUtils.getUsuarioLogado();
-
-		if (usuario == null) {
-			throw new ValidationException("Usuário não está logado!");
-		}
-
 		List<Comprador> compradores = compradorRepository.buscaPorCompradores(usuario.getCompradores());
 		return compradores.stream().map(usuarioTransform::transform).toList();
 	}

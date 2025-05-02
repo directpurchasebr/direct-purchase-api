@@ -28,11 +28,6 @@ public class FornecedorService {
 
 	public List<FornecedorDto> listarFornecedores() throws ValidationException {
 		UsuarioPayload usuario = authUtils.getUsuarioLogado();
-
-		if (usuario == null) {
-			throw new ValidationException("Usuário não está logado!");
-		}
-
 		List<Fornecedor> entitys = fornecedorRespository.buscaPorFornecedores(usuario.getFornecedores());
 		return entitys.stream().map(usuarioTransform::transform).toList();
 	}
