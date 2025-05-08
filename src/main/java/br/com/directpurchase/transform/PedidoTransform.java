@@ -70,6 +70,7 @@ public class PedidoTransform {
                 .pedidoId(entity.getPedidoId())
                 .codigoPedido(numeroPedido)
                 .dataPedido(entity.getDataPedido())
+                .descricaoComprador(entity.getComprador().getPessoa().getNome())
                 .comprador(usuarioTransform.transform(entity.getComprador()))
                 .produtos(entity.getPedidoProdutos().stream().map(this::transform).toList())
                 .valorTotal(entity.getPrecoTotal())

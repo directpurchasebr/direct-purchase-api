@@ -13,7 +13,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class ProdutosExcelRequest {
+public class ImportaExcelRequest {
 
 	private Integer fornecedorId;
 	private MultipartFile file;

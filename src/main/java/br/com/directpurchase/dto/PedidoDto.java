@@ -25,6 +25,7 @@ public class PedidoDto {
     private BigDecimal valorTotal;
     private String observacao;
     private String status;
+    private String descricaoComprador;
     private CompradorDto comprador;
     private List<ProdutoPedidoDto> produtos;
 }
