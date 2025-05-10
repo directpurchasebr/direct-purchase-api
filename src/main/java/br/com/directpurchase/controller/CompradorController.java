@@ -37,7 +37,7 @@ public class CompradorController {
 	public ResponseEntity<Object> salvar(@ModelAttribute CompradorDto request)
 			throws APIException {
 		try {
-			log.info("[{}] /fornecedor/salvar", request);
+			log.info("[{}] /comprador/salvar", request);
 			return ResponseEntity.ok().body(compradorService.salvarComprador(request));
 		} catch (Exception e) {
 			log.error("[{}] {}", e.getMessage(), e);

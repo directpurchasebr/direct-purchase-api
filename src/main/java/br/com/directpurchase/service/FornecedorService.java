@@ -36,7 +36,7 @@ public class FornecedorService {
 		return entitys.stream().map(pessoaTransform::transform).toList();
 	}
 
-	public Object salvarFornecedor(FornecedorDto request) {
+	public Status salvarFornecedor(FornecedorDto request) {
 		Fornecedor entity = pessoaTransform.transform(request);
 		pessoaDao.salvar(entity);
 		FornecedorDto responseDto = pessoaTransform.transform(entity);

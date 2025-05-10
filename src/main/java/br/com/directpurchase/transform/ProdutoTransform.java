@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Component;
 
+import br.com.directpurchase.dao.EntitysFetchDao;
 import br.com.directpurchase.dto.FornecedorDto;
 import br.com.directpurchase.dto.ProdutoDto;
 import br.com.directpurchase.entity.Fornecedor;
@@ -11,6 +12,27 @@ import br.com.directpurchase.entity.Produto;
 
 @Component
 public class ProdutoTransform {
+
+	private final EntitysFetchDao entitysFetchDao;
+
+	public ProdutoTransform(EntitysFetchDao entitysFetchDao) {
+		this.entitysFetchDao = entitysFetchDao;
+	}
+
+	public Produto transform(ProdutoDto dto) {
+		return Produto.builder()
+				.produtoId(dto.getProdutoId())
+				.codigo(removerEspacos(dto.getCodigo()))
+				.descricao(removerEspacos(dto.getDescricao()))
+				.unidade(removerEspacos(dto.getUnidade()))
+				.preco(dto.getPreco())
+				.fornecedor(transform(dto.getFornecedor()))
+				.build();
+	}
+
+	public Fornecedor transform(FornecedorDto dto) {
+		return entitysFetchDao.findFornecedorById(dto.getFornecedorId());
+	}
 
 	public ProdutoDto transform(Produto entity) {
 

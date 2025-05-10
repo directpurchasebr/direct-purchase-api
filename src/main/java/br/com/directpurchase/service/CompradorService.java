@@ -36,7 +36,7 @@ public class CompradorService {
 		return compradores.stream().map(pessoaTransform::transform).toList();
 	}
 
-	public Object salvarComprador(CompradorDto request) {
+	public Status salvarComprador(CompradorDto request) {
 		Comprador entity = pessoaTransform.transform(request);
 		pessoaDao.salvar(entity);
 		CompradorDto responseDto = pessoaTransform.transform(entity);
