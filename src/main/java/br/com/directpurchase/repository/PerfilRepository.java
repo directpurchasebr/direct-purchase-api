@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import br.com.directpurchase.entity.Perfil;
 
-public interface PerfilRepository  extends JpaRepository<Perfil, Integer> {
+public interface PerfilRepository extends JpaRepository<Perfil, Integer> {
 
 	@Query("select p from Perfil p where p.indRegular = true ")
 	public List<Perfil> buscaRegular();

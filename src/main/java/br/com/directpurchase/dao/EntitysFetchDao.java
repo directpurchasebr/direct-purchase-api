@@ -7,12 +7,20 @@ import org.springframework.stereotype.Repository;
 
 import br.com.directpurchase.entity.Comprador;
 import br.com.directpurchase.entity.Fornecedor;
+import br.com.directpurchase.entity.Negocio;
 import br.com.directpurchase.entity.Perfil;
+import br.com.directpurchase.entity.Pessoa;
+import br.com.directpurchase.entity.PessoaBanco;
+import br.com.directpurchase.entity.PessoaEndereco;
 import br.com.directpurchase.entity.Produto;
 import br.com.directpurchase.entity.Usuario;
 import br.com.directpurchase.repository.CompradorRepository;
 import br.com.directpurchase.repository.FornecedorRespository;
+import br.com.directpurchase.repository.NegocioRepository;
 import br.com.directpurchase.repository.PerfilRepository;
+import br.com.directpurchase.repository.PessoaBancoRepository;
+import br.com.directpurchase.repository.PessoaEnderecoRepository;
+import br.com.directpurchase.repository.PessoaRepository;
 import br.com.directpurchase.repository.ProdutoRepository;
 import br.com.directpurchase.repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -34,6 +42,18 @@ public class EntitysFetchDao {
 
     @Autowired
     private ProdutoRepository produtoRepository;
+
+    @Autowired
+    private NegocioRepository negocioRepository;
+
+    @Autowired
+    private PessoaEnderecoRepository pessoaEnderecoRepository;
+
+    @Autowired
+    private PessoaBancoRepository pessoaBancoRepository;
+
+    @Autowired
+    private PessoaRepository pessoaRepository;
 
     private <T> T findEntityById(Optional<T> entityOpt, String entityName, Integer entityId) {
         return entityOpt
@@ -65,4 +85,20 @@ public class EntitysFetchDao {
         return findEntityById(produtoRepository.findById(produtoId), "Produto", produtoId);
     }
 
+    public Negocio findNegocioById(Integer negocioId) {
+        return findEntityById(negocioRepository.findById(negocioId), "Negocio", negocioId);
+    }
+
+    public PessoaEndereco findPessoaEnderecoById(Integer pessoaEnderecoId) {
+        return findEntityById(pessoaEnderecoRepository.findById(pessoaEnderecoId), "PessoaEndereco", pessoaEnderecoId);
+    }
+
+    public PessoaBanco findPessoaBancoById(Integer pessoaBancoId) {
+        return findEntityById(pessoaBancoRepository.findById(pessoaBancoId), "PessoaBanco", pessoaBancoId);
+    }
+
+    public Pessoa findPessoaById(Integer pessoaId) {
+        return findEntityById(pessoaRepository.findById(pessoaId), "Pessoa", pessoaId);
+    }
+    
 }

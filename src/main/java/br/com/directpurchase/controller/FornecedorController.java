@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.directpurchase.dto.FornecedorDto;
 import br.com.directpurchase.excel.request.ImportaExcelRequest;
 import br.com.directpurchase.excel.service.ExcelImportService;
 import br.com.directpurchase.exception.APIException;
@@ -23,7 +24,6 @@ public class FornecedorController {
 
 	@Autowired
 	private FornecedorService fornecedorService;
-
 
 	@Autowired
 	private ExcelImportService excelImportService;
@@ -48,6 +48,18 @@ public class FornecedorController {
 			log.info("[] /fornecedor/listar");
 
 			return ResponseEntity.ok().body(fornecedorService.listarFornecedores());
+		} catch (Exception e) {
+			log.error("[{}] {}", e.getMessage(), e);
+			throw new APIException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+		}
+	}
+
+	@PostMapping(path = "/fornecedor/salvar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Object> salvar(@ModelAttribute FornecedorDto request)
+			throws APIException {
+		try {
+			log.info("[{}] /fornecedor/salvar", request);
+			return ResponseEntity.ok().body(fornecedorService.salvarFornecedor(request));
 		} catch (Exception e) {
 			log.error("[{}] {}", e.getMessage(), e);
 			throw new APIException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());

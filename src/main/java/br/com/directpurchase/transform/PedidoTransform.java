@@ -18,14 +18,14 @@ import br.com.directpurchase.entity.PedidoProduto;
 public class PedidoTransform {
 
     private final EntitysFetchDao entitysFetchDao;
-    private final UsuarioTransform usuarioTransform;
     private final ProdutoTransform produtoTransform;
+    private final PessoaTransform pessoaTransform;
 
-    public PedidoTransform(EntitysFetchDao entitysFetchDao, UsuarioTransform usuarioTransform,
-            ProdutoTransform produtoTransform) {
+    public PedidoTransform(EntitysFetchDao entitysFetchDao,
+            ProdutoTransform produtoTransform, PessoaTransform pessoaTransform) {
         this.entitysFetchDao = entitysFetchDao;
-        this.usuarioTransform = usuarioTransform;
         this.produtoTransform = produtoTransform;
+        this.pessoaTransform = pessoaTransform;
     }
 
     public Pedido transform(PedidoDto body, Integer usuarioId) {
@@ -71,7 +71,7 @@ public class PedidoTransform {
                 .codigoPedido(numeroPedido)
                 .dataPedido(entity.getDataPedido())
                 .descricaoComprador(entity.getComprador().getPessoa().getNome())
-                .comprador(usuarioTransform.transform(entity.getComprador()))
+                .comprador(pessoaTransform.transform(entity.getComprador()))
                 .produtos(entity.getPedidoProdutos().stream().map(this::transform).toList())
                 .valorTotal(entity.getPrecoTotal())
                 .observacao(entity.getObservacao())
