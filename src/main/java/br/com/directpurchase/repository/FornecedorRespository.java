@@ -13,4 +13,7 @@ public interface FornecedorRespository extends JpaRepository<Fornecedor, Integer
 	@Query("select f from Fornecedor f where f.fornecedorId IN (:fornecedores) ")
 	public List<Fornecedor> buscaPorFornecedores(@Param("fornecedores") List<Integer> fornecedores);
 
+	@Query("select f from Fornecedor f where f.pessoa.pessoaId= :pessoaId ")
+	public Fornecedor findPessoaById(@Param("pessoaId") Integer pessoaId);
+
 }

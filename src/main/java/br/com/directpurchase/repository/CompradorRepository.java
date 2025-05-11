@@ -13,4 +13,7 @@ public interface CompradorRepository extends JpaRepository<Comprador, Integer> {
 	@Query("select c from Comprador c where c.compradorId IN (:compradores) ")
 	public List<Comprador> buscaPorCompradores(@Param("compradores") List<Integer> compradores);
 
+	@Query("select c from Comprador c where c.pessoa.pessoaId= :pessoaId ")
+	public Comprador findPessoaById(@Param("pessoaId") Integer pessoaId);
+
 }

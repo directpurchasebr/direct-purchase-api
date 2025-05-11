@@ -15,46 +15,69 @@ import br.com.directpurchase.entity.Fornecedor;
 import br.com.directpurchase.entity.Pessoa;
 import br.com.directpurchase.entity.PessoaBanco;
 import br.com.directpurchase.entity.PessoaEndereco;
+import br.com.directpurchase.repository.CompradorRepository;
+import br.com.directpurchase.repository.FornecedorRespository;
 
 @Component
 public class PessoaTransform {
 
     private final EntitysFetchDao entitysFetchDao;
+    private final CompradorRepository compradorRepository;
+    private final FornecedorRespository fornecedorRespository;
 
-    public PessoaTransform(EntitysFetchDao entitysFetchDao) {
+    public PessoaTransform(EntitysFetchDao entitysFetchDao, CompradorRepository compradorRepository,
+            FornecedorRespository fornecedorRespository) {
         this.entitysFetchDao = entitysFetchDao;
+        this.compradorRepository = compradorRepository;
+        this.fornecedorRespository = fornecedorRespository;
     }
 
     public Fornecedor transform(FornecedorDto dto) {
-        Fornecedor entity = entitysFetchDao.findFornecedorById(dto.getFornecedorId());
-        if (entity == null) {
+        Fornecedor entity = null;
+        if (dto.getFornecedorId() != null ||
+                (dto.getFornecedorId() == 0
+                        && dto.getPessoaId() != null)) {
+            entity = fornecedorRespository.findPessoaById(dto.getPessoaId());
+        } else if (dto.getFornecedorId() != null) {
+            entity = entitysFetchDao.findFornecedorById(dto.getFornecedorId());
+        } else {
             entity = new Fornecedor();
         }
-        Pessoa pessoa = transformPessoa(dto);
+
+        Pessoa pessoa = transformPessoa(dto, entity.getPessoa());
         entity.setLayoutExcel(dto.getLayoutExcel());
         entity.setPessoa(pessoa);
         return entity;
     }
 
     public Comprador transform(CompradorDto dto) {
-        Comprador entity = entitysFetchDao.findCompradorById(dto.getCompradorId());
-        if (entity == null) {
+        Comprador entity = null;
+        if (dto.getCompradorId() != null ||
+                (dto.getCompradorId() == 0
+                        && dto.getPessoaId() != null)) {
+            entity = compradorRepository.findPessoaById(dto.getPessoaId());
+        } else if (dto.getCompradorId() != null) {
+            entity = entitysFetchDao.findCompradorById(dto.getCompradorId());
+        } else {
             entity = new Comprador();
         }
-        Pessoa pessoa = transformPessoa(dto);
+
+        Pessoa pessoa = transformPessoa(dto, entity.getPessoa());
         entity.setPessoa(pessoa);
         return entity;
     }
 
-    public Pessoa transformPessoa(PessoaDto dto) {
+    public Pessoa transformPessoa(PessoaDto dto, Pessoa old) {
         Pessoa entity = null;
         if (dto.getPessoaId() == null) {
             entity = new Pessoa();
             entity.setDataCadastro(LocalDateTime.now());
         } else {
-            entity = entitysFetchDao.findPessoaById(dto.getPessoaId());
+            entity = old;
         }
-        entity.setNegocio(entitysFetchDao.findNegocioById(dto.getNegocioId()));
+        entity.setNegocio(dto.getNegocioId() != null && dto.getNegocioId() > 0
+                ? entitysFetchDao.findNegocioById(dto.getNegocioId())
+                : null);
         entity.setCodigo(dto.getCodigo());
         entity.setNome(dto.getNome());
         entity.setNomeFantasia(dto.getNomeFantasia());
@@ -76,7 +99,9 @@ public class PessoaTransform {
     }
 
     public PessoaEndereco transform(PessoaEnderecoDto dto) {
-        PessoaEndereco entity = entitysFetchDao.findPessoaEnderecoById(dto.getPessoaEnderecoId());
+        PessoaEndereco entity = dto.getPessoaEnderecoId() != null && dto.getPessoaEnderecoId() > 0
+                ? entitysFetchDao.findPessoaEnderecoById(dto.getPessoaEnderecoId())
+                : null;
         if (entity == null) {
             entity = new PessoaEndereco();
         }
@@ -91,7 +116,9 @@ public class PessoaTransform {
     }
 
     public PessoaBanco transform(PessoaBancoDto dto) {
-        PessoaBanco entity = entitysFetchDao.findPessoaBancoById(dto.getPessoaBancoId());
+        PessoaBanco entity = dto.getPessoaBancoId() != null && dto.getPessoaBancoId() > 0
+                ? entitysFetchDao.findPessoaBancoById(dto.getPessoaBancoId())
+                : null;
         if (entity == null) {
             entity = new PessoaBanco();
         }

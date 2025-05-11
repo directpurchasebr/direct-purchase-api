@@ -20,6 +20,7 @@ public class ProdutoDto {
 	private Integer produtoId;
 	private String codigo;
 	private String descricao;
+	private String descOriginal;
 	private String marca;
 	private String unidade;
 	private BigDecimal preco;

@@ -46,6 +46,7 @@ public class ProdutoTransform {
 				.produtoId(entity.getProdutoId())
 				.codigo(removerEspacos(entity.getCodigo()))
 				.descricao(descricao.toString())
+				.descOriginal(null == entity.getDescricao() ? "" : removerEspacos(entity.getDescricao().toUpperCase()))
 				.unidade(removerEspacos(entity.getUnidade()))
 				.preco(entity.getPreco())
 				.fornecedor(transform(entity.getFornecedor()))
