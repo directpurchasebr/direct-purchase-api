@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.directpurchase.dto.FornecedorDto;
@@ -54,8 +55,8 @@ public class FornecedorController {
 		}
 	}
 
-	@PostMapping(path = "/fornecedor/salvar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> salvar(@ModelAttribute FornecedorDto request)
+	@PostMapping(path = "/fornecedor/salvar", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Object> salvar(@RequestBody FornecedorDto request)
 			throws APIException {
 		try {
 			log.info("[{}] /fornecedor/salvar", request);

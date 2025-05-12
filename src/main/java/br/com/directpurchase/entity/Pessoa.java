@@ -99,10 +99,10 @@ public class Pessoa implements Serializable {
     @Column(name = "DATA_CADASTRO")
     private LocalDateTime dataCadastro;
 
-    @OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL)
     private List<PessoaEndereco> enderecos;
 
-    @OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL)
     private List<PessoaBanco> dadosBancarios;
 
 }

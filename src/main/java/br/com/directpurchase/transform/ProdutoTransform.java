@@ -1,5 +1,6 @@
 package br.com.directpurchase.transform;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.stereotype.Component;
@@ -9,6 +10,7 @@ import br.com.directpurchase.dto.FornecedorDto;
 import br.com.directpurchase.dto.ProdutoDto;
 import br.com.directpurchase.entity.Fornecedor;
 import br.com.directpurchase.entity.Produto;
+import br.com.directpurchase.entity.Usuario;
 
 @Component
 public class ProdutoTransform {
@@ -19,14 +21,17 @@ public class ProdutoTransform {
 		this.entitysFetchDao = entitysFetchDao;
 	}
 
-	public Produto transform(ProdutoDto dto) {
+	public Produto transform(ProdutoDto dto, Integer usuarioId) {
 		return Produto.builder()
 				.produtoId(dto.getProdutoId())
 				.codigo(removerEspacos(dto.getCodigo()))
 				.descricao(removerEspacos(dto.getDescricao()))
 				.unidade(removerEspacos(dto.getUnidade()))
 				.preco(dto.getPreco())
+				.dataModif(LocalDateTime.now())
+				.usuarioModifId(usuarioId)
 				.fornecedor(transform(dto.getFornecedor()))
+				.usuario(new Usuario(usuarioId))
 				.build();
 	}
 

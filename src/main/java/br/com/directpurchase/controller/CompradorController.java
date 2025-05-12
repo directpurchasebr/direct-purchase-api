@@ -5,8 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.directpurchase.dto.CompradorDto;
@@ -33,8 +33,8 @@ public class CompradorController {
 		}
 	}
 
-	@PostMapping(path = "/comprador/salvar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> salvar(@ModelAttribute CompradorDto request)
+	@PostMapping(path = "/comprador/salvar", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Object> salvar(@RequestBody CompradorDto request)
 			throws APIException {
 		try {
 			log.info("[{}] /comprador/salvar", request);

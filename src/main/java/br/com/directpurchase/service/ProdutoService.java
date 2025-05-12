@@ -43,8 +43,11 @@ public class ProdutoService {
 	}
 
 	public Status salvarProduto(ProdutoDto request) {
-		Produto entity = produtoTransform.transform(request);
+		UsuarioPayload usuario = authUtils.getUsuarioLogado();
+
+		Produto entity = produtoTransform.transform(request, usuario.getUsuarioId());
 		produtoDao.salvar(entity);
+
 		ProdutoDto responseDto = produtoTransform.transform(entity);
 		return new Status(true, "Produto cadastrado com sucesso", "", responseDto);
 	}
