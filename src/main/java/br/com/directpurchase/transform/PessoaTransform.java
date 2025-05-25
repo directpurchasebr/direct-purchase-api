@@ -1,7 +1,9 @@
 package br.com.directpurchase.transform;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import br.com.directpurchase.dao.EntitysFetchDao;
@@ -12,12 +14,15 @@ import br.com.directpurchase.dto.PessoaDto;
 import br.com.directpurchase.dto.PessoaEnderecoDto;
 import br.com.directpurchase.entity.Comprador;
 import br.com.directpurchase.entity.Fornecedor;
+import br.com.directpurchase.entity.Negocio;
 import br.com.directpurchase.entity.Pessoa;
 import br.com.directpurchase.entity.PessoaBanco;
 import br.com.directpurchase.entity.PessoaEndereco;
 import br.com.directpurchase.repository.CompradorRepository;
 import br.com.directpurchase.repository.FornecedorRespository;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 public class PessoaTransform {
 
@@ -34,11 +39,10 @@ public class PessoaTransform {
 
     public Fornecedor transform(FornecedorDto dto) {
         Fornecedor entity = null;
-        if (dto.getFornecedorId() != null ||
-                (dto.getFornecedorId() == 0
-                        && dto.getPessoaId() != null)) {
+        if (dto.getFornecedorId() != null && dto.getPessoaId() != null &&
+                (dto.getFornecedorId() != 0 && dto.getPessoaId() != 0)) {
             entity = fornecedorRespository.findPessoaById(dto.getPessoaId());
-        } else if (dto.getFornecedorId() != null) {
+        } else if (dto.getFornecedorId() != null && dto.getFornecedorId() != 0) {
             entity = entitysFetchDao.findFornecedorById(dto.getFornecedorId());
         } else {
             entity = new Fornecedor();
@@ -52,11 +56,10 @@ public class PessoaTransform {
 
     public Comprador transform(CompradorDto dto) {
         Comprador entity = null;
-        if (dto.getCompradorId() != null ||
-                (dto.getCompradorId() == 0
-                        && dto.getPessoaId() != null)) {
+        if (dto.getCompradorId() != null && dto.getPessoaId() != null &&
+                (dto.getCompradorId() != 0 && dto.getPessoaId() != 0)) {
             entity = compradorRepository.findPessoaById(dto.getPessoaId());
-        } else if (dto.getCompradorId() != null) {
+        } else if (dto.getCompradorId() != null && dto.getCompradorId() != 0) {
             entity = entitysFetchDao.findCompradorById(dto.getCompradorId());
         } else {
             entity = new Comprador();
@@ -69,18 +72,27 @@ public class PessoaTransform {
 
     public Pessoa transformPessoa(PessoaDto dto, Pessoa old) {
         Pessoa entity = null;
-        if (dto.getPessoaId() == null) {
+        if (dto.getPessoaId() == null || dto.getPessoaId() == 0) {
             entity = new Pessoa();
             entity.setDataCadastro(LocalDateTime.now());
         } else {
             entity = old;
         }
+
+        String tipoPessoa = null;
+        if (StringUtils.isNotBlank(dto.getCnpj()))
+            tipoPessoa = "JURIDICA";
+        else
+            tipoPessoa = "FISICA";
+
+        entity.setTipoPessoa(tipoPessoa);
+
         entity.setNegocio(dto.getNegocioId() != null && dto.getNegocioId() > 0
                 ? entitysFetchDao.findNegocioById(dto.getNegocioId())
-                : null);
+                : new Negocio(1));
         entity.setCodigo(dto.getCodigo());
-        entity.setNome(dto.getNome());
-        entity.setNomeFantasia(dto.getNomeFantasia());
+        entity.setNome(Optional.ofNullable(dto.getNome()).map(String::toUpperCase).orElse(null));
+        entity.setNomeFantasia(Optional.ofNullable(dto.getNomeFantasia()).map(String::toUpperCase).orElse(null));
         entity.setCpf(dto.getCpf());
         entity.setCnpj(dto.getCnpj());
         entity.setInscricaoEstadual(dto.getInscricaoEstadual());

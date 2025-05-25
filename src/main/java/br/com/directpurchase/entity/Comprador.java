@@ -1,6 +1,7 @@
 package br.com.directpurchase.entity;
 
 import java.io.Serializable;
+import java.util.List;
 
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
@@ -9,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
@@ -38,6 +40,9 @@ public class Comprador implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "COMPRADOR_SEQ")
 	@Column(name = "COMPRADOR_ID")
 	private Integer compradorId;
+
+	@ManyToMany(mappedBy = "compradores")
+	private List<Usuario> usuarios;
 
 	@OneToOne
 	@JoinColumn(name = "PESSOA_ID", referencedColumnName = "PESSOA_ID", nullable = false, unique = true)
