@@ -15,7 +15,9 @@ import br.com.directpurchase.response.LoginResponse;
 import br.com.directpurchase.response.Status;
 import br.com.directpurchase.transform.UsuarioTransform;
 import br.com.directpurchase.util.PasswordUtil;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 public class AuthService {
 
@@ -47,7 +49,12 @@ public class AuthService {
 
 			String tokenAccess = tokenUtils.generateTokenAcess(fetchUser);
 			if (fetchUser.getSession() != null && fetchUser.getSession().getIndSession()) {
-				throw new ValidationException("Sessao ja iniciada!!!!");
+				// throw new ValidationException("Sessao ja iniciada!!!!");
+
+				log.info("Sessao ja iniciada para o token {}", fetchUser.getSession().getTokenAccess());
+				log.info("device: {}", request.getDeviceInfo());
+				log.info("Sessao ja logado: {}", fetchUser.getSession());
+
 			} else {
 				if (request.getDeviceId() != null && request.getDeviceInfo() != null) {
 					String tokenUser = tokenUtils.generateTokenUser(
