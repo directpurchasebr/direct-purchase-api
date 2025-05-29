@@ -38,8 +38,10 @@ public class ProdutoService {
 	}
 
 	public List<ProdutoDto> listarProdutos() {
-		return StreamSupport.stream(produtoRepository.findAll().spliterator(), false)
-				.map(produtoTransform::transform).toList();
+		UsuarioPayload usuario = authUtils.getUsuarioLogado();
+
+		return produtoRepository.buscaProdutoByUsuario(usuario.getUsuarioId())
+				.stream().map(produtoTransform::transform).toList();
 	}
 
 	public Status salvarProduto(ProdutoDto request) {

@@ -10,6 +10,9 @@ import br.com.directpurchase.entity.Produto;
 
 public interface ProdutoRepository extends JpaRepository<Produto, Integer> {
 
+	@Query("select p from Produto p where p.usuario.usuarioId = :usuarioId ")
+	public List<Produto> buscaProdutoByUsuario(@Param("usuarioId") Integer usuarioId);
+
 	@Query("select p from Produto p where p.usuario.usuarioId = :usuarioId " +
 			"and p.codigo = :codigo and p.fornecedor.fornecedorId = :fornecedorId ")
 	public List<Produto> buscaProdutoMain(
