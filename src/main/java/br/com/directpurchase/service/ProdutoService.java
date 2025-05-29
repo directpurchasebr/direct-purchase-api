@@ -1,7 +1,6 @@
 package br.com.directpurchase.service;
 
 import java.util.List;
-import java.util.stream.StreamSupport;
 
 import org.springframework.stereotype.Service;
 
