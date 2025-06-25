@@ -10,31 +10,13 @@ import br.com.directpurchase.excel.poi.Template;
 @Component
 public class ValidateTemplate {
 
-	boolean one1 = Boolean.FALSE;
-	boolean one2 = Boolean.FALSE;
-	boolean one3 = Boolean.FALSE;
-	boolean one4 = Boolean.FALSE;
-
-	boolean two1 = Boolean.FALSE;
-	boolean two2 = Boolean.FALSE;
-	boolean two3 = Boolean.FALSE;
-	boolean two4 = Boolean.FALSE;
-	boolean two5 = Boolean.FALSE;
-
-	boolean three1 = Boolean.FALSE;
-	boolean three2 = Boolean.FALSE;
-	boolean three3 = Boolean.FALSE;
-	boolean three4 = Boolean.FALSE;
-	boolean three5 = Boolean.FALSE;
-	boolean three6 = Boolean.FALSE;
-	boolean three7 = Boolean.FALSE;
-
-	boolean four1 = Boolean.FALSE;
-	boolean four2 = Boolean.FALSE;
-	boolean four3 = Boolean.FALSE;
-	boolean four4 = Boolean.FALSE;
+	private boolean one1, one2, one3, one4;
+	private boolean two1, two2, two3, two4, two5;
+	private boolean three1, three2, three3, three4, three5, three6, three7;
+	private boolean four1, four2, four3, four4;
 
 	public Template validate(Map<Integer, List<Object>> excel) {
+		resetFlags();
 
 		for (Map.Entry<Integer, List<Object>> entry : excel.entrySet()) {
 			Integer key = entry.getKey();
@@ -77,92 +59,70 @@ public class ValidateTemplate {
 	}
 
 	private Template validaOne(String convertStr) {
-		if (convertStr.trim().equals("PRODUTO")) {
+		if (convertStr.trim().equals("PRODUTO"))
 			one1 = Boolean.TRUE;
-		}
-		if (one1 && convertStr.trim().equals("DESCRICAO")) {
+		if (one1 && convertStr.trim().equals("DESCRICAO"))
 			one2 = Boolean.TRUE;
-		}
-		if (one1 && one2 && convertStr.trim().equals("UNIDADE")) {
+		if (one1 && one2 && convertStr.trim().equals("UNIDADE"))
 			one3 = Boolean.TRUE;
-		}
-		if (one1 && one2 && one3 && convertStr.trim().equals("PROMOCAO_2")) {
+		if (one1 && one2 && one3 && convertStr.trim().equals("PROMOCAO_2"))
 			one4 = Boolean.TRUE;
-		}
-		if (one4) {
-			return Template.ONE;
-		}
-		return null;
+
+		return one4 ? Template.ONE : null;
 	}
 
 	private Template validaTwo(String convertStr) {
-		if (convertStr.trim().equals("Código")) {
+		if (convertStr.trim().equals("Código"))
 			two1 = Boolean.TRUE;
-		}
-		if (two1 && convertStr.trim().equals("Descrição Mercadoria")) {
+		if (two1 && convertStr.trim().equals("Descrição Mercadoria"))
 			two2 = Boolean.TRUE;
-		}
-		if (two1 && two2 && convertStr.trim().equals("Quant. Embal.")) {
+		if (two1 && two2 && convertStr.trim().equals("Quant. Embal."))
 			two3 = Boolean.TRUE;
-		}
-		if (two1 && two2 && two3 && convertStr.trim().equals("Marca")) {
+		if (two1 && two2 && two3 && convertStr.trim().equals("Marca"))
 			two4 = Boolean.TRUE;
-		}
-		if (two1 && two2 && two3 && two4 && convertStr.trim().equals("P. Indiv.")) {
+		if (two1 && two2 && two3 && two4 && convertStr.trim().equals("P. Indiv."))
 			two5 = Boolean.TRUE;
-		}
-		if (two5) {
-			return Template.TWO;
-		}
 
-		return null;
+		return two5 ? Template.TWO : null;
 	}
 
 	private Template validaThree(String convertStr) {
-		if (convertStr.trim().equals("CODIGO")) {
+		if (convertStr.trim().equals("CODIGO"))
 			three1 = Boolean.TRUE;
-		}
-		if (three1 && convertStr.trim().equals("DESCRIÇÃO")) {
+		if (three1 && convertStr.trim().equals("DESCRIÇÃO"))
 			three2 = Boolean.TRUE;
-		}
-		if (three1 && three2 && convertStr.trim().equals("EMBALAGEM")) {
+		if (three1 && three2 && convertStr.trim().equals("EMBALAGEM"))
 			three3 = Boolean.TRUE;
-		}
-		if (three1 && three2 && three3 && convertStr.trim().equals("MARCA")) {
+		if (three1 && three2 && three3 && convertStr.trim().equals("MARCA"))
 			three4 = Boolean.TRUE;
-		}
-		if (three1 && three2 && three3 && three4 && convertStr.trim().equals("Q.VENDAS")) {
+		if (three1 && three2 && three3 && three4 && convertStr.trim().equals("Q.VENDAS"))
 			three5 = Boolean.TRUE;
-		}
-		if (three1 && three2 && three3 && three4 && three5 && convertStr.trim().equals("PRECO")) {
+		if (three1 && three2 && three3 && three4 && three5 && convertStr.trim().equals("PRECO"))
 			three6 = Boolean.TRUE;
-		}
-		if (three1 && three2 && three3 && three4 && three5 && three6 && convertStr.trim().equals("CX FECHADA")) {
+		if (three1 && three2 && three3 && three4 && three5 && three6 && convertStr.trim().equals("CX FECHADA"))
 			three7 = Boolean.TRUE;
-		}
-		if (three7) {
-			return Template.THREE;
-		}
 
-		return null;
+		return three7 ? Template.THREE : null;
 	}
 
 	private Template validaFour(String convertStr) {
-		if (convertStr.trim().equals("Codigo")) {
+		if (convertStr.trim().equals("Codigo"))
 			four1 = Boolean.TRUE;
-		}
-		if (four1 && convertStr.trim().equals("Descrição")) {
+		if (four1 && convertStr.trim().equals("Descrição"))
 			four2 = Boolean.TRUE;
-		}
-		if (four1 && four2 && convertStr.trim().equals("Unidade")) {
+		if (four1 && four2 && convertStr.trim().equals("Unidade"))
 			four3 = Boolean.TRUE;
-		}
-		if (four1 && four2 && four3 && convertStr.trim().equals("Pr.Venda")) {
+		if (four1 && four2 && four3 && convertStr.trim().equals("Pr.Venda"))
 			four4 = Boolean.TRUE;
-		}
-		if (four4) {
-			return Template.FOUR;
-		}
-		return null;
+
+		return four4 ? Template.FOUR : null;
 	}
+
+	private void resetFlags() {
+		one1 = one2 = one3 = one4 = false;
+		two1 = two2 = two3 = two4 = two5 = false;
+		three1 = three2 = three3 = three4 = three5 = three6 = three7 = false;
+		four1 = four2 = four3 = four4 = false;
+	}
+
 }

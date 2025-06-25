@@ -2,7 +2,7 @@
 
 set -e
 
-VERSION="1.0.3"
+VERSION="1.0.4"
 IMAGE="directpurchasebr/direct-purchase-api"
 
 echo "🔧 Verificando se buildx está configurado..."
