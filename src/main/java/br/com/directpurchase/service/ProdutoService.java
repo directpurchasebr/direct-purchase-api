@@ -10,6 +10,7 @@ import br.com.directpurchase.dao.ProdutoDao;
 import br.com.directpurchase.dto.ProdutoDto;
 import br.com.directpurchase.entity.Produto;
 import br.com.directpurchase.repository.ProdutoRepository;
+import br.com.directpurchase.request.ConsultaProduto;
 import br.com.directpurchase.response.Status;
 import br.com.directpurchase.transform.ProdutoTransform;
 
@@ -32,7 +33,17 @@ public class ProdutoService {
 	public List<ProdutoDto> buscaProdutos(String descricao) {
 		UsuarioPayload usuario = authUtils.getUsuarioLogado();
 
-		return produtoRepository.buscaPorDescricao(usuario.getUsuarioId(), descricao, usuario.getFornecedores())
+		return produtoRepository.buscar(usuario.getUsuarioId(), descricao, usuario.getFornecedores())
+				.stream().map(produtoTransform::transform).toList();
+	}
+
+	public Object buscar(ConsultaProduto request) {
+		UsuarioPayload usuario = authUtils.getUsuarioLogado();
+
+		return produtoRepository.buscar(
+				usuario.getUsuarioId(),
+				request.getDescricao(),
+				request.getFornecedorId() != null ? List.of(request.getFornecedorId()) : usuario.getFornecedores())
 				.stream().map(produtoTransform::transform).toList();
 	}
 
@@ -52,4 +63,5 @@ public class ProdutoService {
 		ProdutoDto responseDto = produtoTransform.transform(entity);
 		return new Status(true, "Produto cadastrado com sucesso", "", responseDto);
 	}
+
 }

@@ -21,9 +21,9 @@ public interface ProdutoRepository extends JpaRepository<Produto, Integer> {
 			@Param("fornecedorId") Integer fornecedorId);
 
 	@Query("select p from Produto p where p.usuario.usuarioId = :usuarioId " +
-			"and UPPER(TRIM(p.descricao)) like CONCAT(UPPER(:descricao), '%') " +
+			"AND UPPER(TRIM(p.descricao)) LIKE CONCAT(UPPER(COALESCE(:descricao, '')), '%') " +
 			"and p.fornecedor.fornecedorId IN (:fornecedores) ")
-	public List<Produto> buscaPorDescricao(
+	public List<Produto> buscar(
 			@Param("usuarioId") Integer usuarioId,
 			@Param("descricao") String descricao,
 			@Param("fornecedores") List<Integer> fornecedores);

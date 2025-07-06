@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>br.com</groupId>
 	<artifactId>directpurchaseapi</artifactId>
-	<version>1.0.4</version>
+	<version>1.0.5</version>
 	<name>direct-purchase-api</name>
 	<description>direct-purchase-api</description>
 	<url />

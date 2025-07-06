@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.directpurchase.dto.ProdutoDto;
 import br.com.directpurchase.exception.APIException;
+import br.com.directpurchase.request.ConsultaProduto;
 import br.com.directpurchase.service.ProdutoService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -40,6 +41,18 @@ public class ProdutoController {
 			log.info("[{}] /produto/buscar/", descricao);
 
 			return ResponseEntity.ok().body(produtoService.buscaProdutos(descricao));
+		} catch (Exception e) {
+			log.error("[{}] {}", e.getMessage(), e);
+			throw new APIException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+		}
+	}
+
+	@PostMapping(path = "/produto/buscar", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Object> buscar(@RequestBody ConsultaProduto request) throws APIException {
+		try {
+			log.info("[{}] /produto/buscar/", request);
+
+			return ResponseEntity.ok().body(produtoService.buscar(request));
 		} catch (Exception e) {
 			log.error("[{}] {}", e.getMessage(), e);
 			throw new APIException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
