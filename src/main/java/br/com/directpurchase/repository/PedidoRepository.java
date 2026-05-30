@@ -15,5 +15,4 @@ public interface PedidoRepository extends JpaRepository<Pedido, Integer> {
 
     @Query("select p from Pedido p where p.usuario.usuarioId = :usuarioId order by p.dataPedido desc")
     public List<Pedido> listar(@Param("usuarioId") Integer usuarioId);
-
 }

@@ -1,8 +1,9 @@
 # 🛒 Direct Purchase API
 
-API REST em Java com Spring Boot para gerenciamento de pedidos diretos. Focada em controle de usuários, produtos, fornecedores, perfis e autenticação JWT. 
+REST API built with Java and Spring Boot for direct purchase order management.
+Focused on user control, products, suppliers, profiles and JWT authentication.
 
-## 🚀 Tecnologias Utilizadas
+## 🚀 Technologies
 
 - **Java 17**
 - **Spring Boot 3.4.1**
@@ -12,91 +13,86 @@ API REST em Java com Spring Boot para gerenciamento de pedidos diretos. Focada e
 - **Redis**
 - **Swagger/OpenAPI**
 - **Flyway (migrations)**
-- **Apache POI / JXLS / FastExcel (para arquivos Excel)**
+- **Apache POI / JXLS / FastExcel (Excel files)**
 - **Lombok**
 
-## ⚙️ Funcionalidades
+## ⚙️ Features
 
-- 🔐 Autenticação via JWT
-- 📦 Cadastro e gestão de pedidos, produtos, usuários, fornecedores e compradores
-- 👥 Controle de acesso por perfis (Admin, User, etc)
-- 🧾 Exportação e leitura de dados em Excel
-- 🧠 Token seguro com claims customizadas
-- 📊 Documentação interativa com Swagger
+- 🔐 JWT Authentication
+- 📦 Order, product, user, supplier and buyer management
+- 👥 Role-based access control (Admin, User, etc)
+- 🧾 Excel data export and import
+- 🧠 Secure token with custom claims
+- 📊 Interactive API documentation with Swagger
 
-## 🧩 Principais Módulos
+## 🧩 Main Modules
 
-| Módulo      | Descrição |
-|-------------|-----------|
-| **AuthService**        | Login com JWT e geração de tokens |
-| **UsuarioService**     | Cadastro e recuperação de dados do usuário |
-| **PedidoService**      | Criação de pedidos vinculados ao usuário logado |
-| **ProdutoService**     | Busca por descrição e listagem geral de produtos |
-| **FornecedorService**  | Listagem de fornecedores disponíveis para o usuário |
-| **CompradorService**   | Visualização de compradores associados |
-| **PerfilService**      | Perfis acessíveis com base no perfil logado |
+| Module                | Description                                          |
+|-----------------------|------------------------------------------------------|
+| **AuthService**       | Login with JWT and token generation                  |
+| **UsuarioService**    | User registration and data retrieval                 |
+| **PedidoService**     | Order creation linked to logged-in user              |
+| **ProdutoService**    | Product search by description and general listing    |
+| **FornecedorService** | Supplier listing available to the user               |
+| **CompradorService**  | Associated buyer visualization                       |
+| **PerfilService**     | Profiles accessible based on logged-in user role     |
 
-## 🧪 Testes
+## 🧪 Tests
 
-- Configurado com `spring-boot-starter-test`
-- Estrutura preparada para testes de unidade e integração
+- Configured with `spring-boot-starter-test`
+- Structure ready for unit and integration tests
 
-## 🔐 Segurança
+## 🔐 Security
 
-- JWT com `JwtFilter` para validação e autenticação de requisições
-- Configurações via `SecurityConfig` com controle de rotas públicas e privadas
-- Stateless com `SessionCreationPolicy.STATELESS`
+- JWT with `JwtFilter` for request validation and authentication
+- `SecurityConfig` with public and private route control
+- Stateless with `SessionCreationPolicy.STATELESS`
 
-## 📄 Documentação da API
+## 📄 API Documentation
 
-Disponível após subir a aplicação:
-- http://localhost:7777/directpurchase/swagger-ui.html
+Available after starting the application:
 
-## 🐳 Rodando com Docker
+```
+http://localhost:7777/directpurchase/swagger-ui.html
+```
+
+## 🐳 Running with Docker
 
 ```bash
-# Build da imagem
+# Build image
 docker build -t direct-purchase-api .
 
-# Executando
+# Run
 docker run -p 8080:7777 direct-purchase-api
 ```
 
-Certifique-se de que o PostgreSQL e o Redis estão rodando e acessíveis da aplicação.
+Make sure PostgreSQL and Redis are running and accessible.
 
-📁 Estrutura do Projeto
+## 📁 Project Structure
+
 ```
 src/main/java/br/com/directpurchase
-├── auth              # Autenticação, payloads, serviços de login
-├── config            # Filtros de segurança e configuração Spring Security
-├── dao / repository  # Repositórios de dados
-├── dto / entity      # DTOs e entidades de banco
-├── service           # Regras de negócio
-├── transform         # Conversão entre entidades e DTOs
-├── request / response # Modelos para entrada/saída de dados da API
+├── auth              # Authentication, payloads, login services
+├── config            # Security filters and Spring Security config
+├── dao / repository  # Data repositories
+├── dto / entity      # DTOs and database entities
+├── service           # Business rules
+├── transform         # Entity to DTO conversion
+├── request / response # API input/output models
 ```
 
-📦 Dependências
+## 📦 Dependencies
 
-Verifique o arquivo pom.xml para uma lista completa. Algumas principais:
+Check `pom.xml` for the full list. Main ones:
 
 ```
 spring-boot-starter-web
-
 spring-boot-starter-security
-
 spring-boot-starter-data-jpa
-
 jjwt (JWT)
-
 springdoc-openapi
-
 postgresql
-
 flyway-core
-
 lombok
-
 poi, jxls, fastexcel
-
 ```
